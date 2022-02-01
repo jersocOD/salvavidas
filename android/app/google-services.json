@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "975831608713",
+    "project_id": "report-a-child",
+    "storage_bucket": "report-a-child.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975831608713:android:730595e6688ec3d7ae0558",
+        "android_client_info": {
+          "package_name": "com.mundoultra.helpachild"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "975831608713-54k8ras9dp00koediu67r3imhvs0qugc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mundoultra.helpachild",
+            "certificate_hash": "136f4369bd13f3d5c6d31122bc5a6f800585e660"
+          }
+        },
+        {
+          "client_id": "975831608713-r1hmuioa5fj70fo4d3msa1gqbafhnphq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuiMW_zNgoURe1sQqIxNvxPEfzAubfgSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "975831608713-r1hmuioa5fj70fo4d3msa1gqbafhnphq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

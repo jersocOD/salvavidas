@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:report_child/controllers/authentication.dart';
+import 'package:report_child/widgets/facebook_sign_in_button.dart';
+import 'package:report_child/widgets/logo_title.dart';
+import 'package:report_child/widgets/sign_in_button.dart';
 
-import 'package:report_child/styles/colors.dart';
+import '../styles/colors.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -11,7 +15,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.firebaseNavy,
+      backgroundColor: Color(0xFF6C63FF),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
@@ -27,30 +31,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: Image.asset(
-                        'assets/firebase_logo.png',
-                        height: 160,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'FlutterFire',
-                      style: TextStyle(
-                        color: CustomColors.firebaseYellow,
-                        fontSize: 40,
-                      ),
-                    ),
-                    Text(
-                      'Authentication',
-                      style: TextStyle(
-                        color: CustomColors.firebaseOrange,
-                        fontSize: 40,
-                      ),
-                    ),
-                  ],
+                  children: [LogoTitle()],
                 ),
               ),
               FutureBuilder(
@@ -59,7 +40,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   if (snapshot.hasError) {
                     return Text('Error initializing Firebase');
                   } else if (snapshot.connectionState == ConnectionState.done) {
-                    return GoogleSignInButton();
+                    return Column(
+                      children: [GoogleSignInButton(), FacebookSignInButton()],
+                    );
                   }
                   return CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
