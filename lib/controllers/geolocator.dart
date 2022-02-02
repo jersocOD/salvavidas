@@ -28,7 +28,7 @@ class GeolocalizationManager {
 
       await Future.delayed(Duration(seconds: 5));
       await Geolocator.openLocationSettings();
-      await Future.delayed(Duration(seconds: 120));
+      await Future.delayed(Duration(seconds: 60));
       if (!alreadyCalled) {
         return initGeolocator(alreadyCalled: true);
       } else {
@@ -64,7 +64,7 @@ class GeolocalizationManager {
             "Para poder localizar al niño, se necesita acceso a su localización. Por favor, le pedimos que active los permisos.",
             navBarControllerKey);
         if (await Geolocator.openAppSettings()) {
-          await Future.delayed(Duration(minutes: 2));
+          await Future.delayed(Duration(minutes: 1));
 
           return initGeolocator(alreadyCalled: true);
         }

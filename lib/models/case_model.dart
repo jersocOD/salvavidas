@@ -28,4 +28,31 @@ class CaseModel with ChangeNotifier {
     _position = newValue;
     notifyListeners();
   }
+
+  String _referencia = "";
+
+  String get referencia => _referencia;
+
+  set referencia(newValue) {
+    _referencia = newValue;
+    notifyListeners();
+  }
+
+  String _comentarios = "";
+
+  String get comentarios => _comentarios;
+
+  set comentarios(newValue) {
+    _comentarios = newValue;
+    notifyListeners();
+  }
+
+  String _observacion = "";
+
+  String get observacion => _observacion;
+
+  set observacion(newValue) {
+    _observacion = newValue;
+    notifyListeners();
+  }
 }

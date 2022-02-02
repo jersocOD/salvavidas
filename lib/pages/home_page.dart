@@ -194,12 +194,12 @@ class _HomePageState extends State<HomePage>
               mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
-                  height: 70,
+                  height: 95,
                   width: double.infinity,
                   child: Center(
                     child: Text(
                       "Grabe un video del niño abandonado o en problemas para reportarlo a las instituciones de ayuda. Lo mantendremos informado de cómo se le ayudó al niño.",
-                      style: TextStyle(color: Colors.white60, fontSize: 12),
+                      style: TextStyle(color: Colors.white, fontSize: 14),
                       textAlign: TextAlign.center,
                     ),
                   ),

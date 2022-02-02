@@ -25,7 +25,9 @@ class BottomNavController extends StatefulWidget {
 class _BottomNavControllerState extends State<BottomNavController> {
   int _selectedIndex = 0;
   String? title = "Help a child";
-  static List<Widget> _pages = <Widget>[];
+  static List<Widget> _pages = <Widget>[
+    HomePage(),
+  ];
 
   static const List<BottomNavigationBarItem> _navigationItems =
       <BottomNavigationBarItem>[
