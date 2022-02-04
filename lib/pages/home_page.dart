@@ -18,6 +18,7 @@ import 'package:report_child/widgets/bottom_light_button.dart';
 import 'package:report_child/widgets/bottom_open_file_button.dart';
 import 'package:report_child/widgets/record_button.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart' as VidThumb;
 
 class HomePage extends StatefulWidget {
   @override
@@ -34,9 +35,10 @@ void logError(String code, String? message) {
   }
 }
 
+CameraController? controller;
+
 class _HomePageState extends State<HomePage>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-  CameraController? controller;
   XFile? imageFile;
   XFile? videoFile;
   VideoPlayerController? videoController;
@@ -44,7 +46,7 @@ class _HomePageState extends State<HomePage>
   bool enableAudio = true;
 
   late AnimationController _flashModeControlRowAnimationController;
-  late Animation<double> _flashModeControlRowAnimation;
+
   late AnimationController _exposureModeControlRowAnimationController;
   late AnimationController _focusModeControlRowAnimationController;
   late GeolocalizationManager geolocalizationManager;
@@ -88,10 +90,7 @@ class _HomePageState extends State<HomePage>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _flashModeControlRowAnimation = CurvedAnimation(
-      parent: _flashModeControlRowAnimationController,
-      curve: Curves.easeInCubic,
-    );
+
     _exposureModeControlRowAnimationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -106,20 +105,17 @@ class _HomePageState extends State<HomePage>
 
     geolocalizationManager.initGeolocator().then((success) {
       if (success) {
-        WidgetsBinding.instance!.addPostFrameCallback((context) {
-          geolocalizationManager.startStreaming((position) {
-            if (position == null) {
-              showInSnackBar(
-                  "Error al obtener localización. Por favor, intente más tarde.");
-              return;
-            }
-            setState(() {
-              locationLatitude = position.latitude;
-              locationLongitude = position.longitude;
-            });
-            Provider.of<CaseModel>(this.context, listen: false).position =
-                position;
-          });
+        geolocalizationManager.startStreaming((position) {
+          if (position == null) {
+            showInSnackBar(
+                "Error al obtener localización. Por favor, intente más tarde.");
+            return;
+          }
+          locationLatitude = position.latitude;
+          locationLongitude = position.longitude;
+          if (mounted) setState(() {});
+          Provider.of<CaseModel>(this.context, listen: false).position =
+              position;
         });
       }
     });
@@ -150,7 +146,8 @@ class _HomePageState extends State<HomePage>
       return;
     }
 
-    if (state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
       cameraController.dispose();
     } else if (state == AppLifecycleState.resumed) {
       onNewCameraSelected(cameraController.description);
@@ -298,122 +295,6 @@ class _HomePageState extends State<HomePage>
     await controller!.setZoomLevel(_currentScale);
   }
 
-  /// Display a bar with buttons to change the flash and exposure modes
-  Widget _modeControlRowWidget() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.flash_on),
-              color: Colors.blue,
-              onPressed: controller != null ? onFlashModeButtonPressed : null,
-            ),
-          ],
-        ),
-        _flashModeControlRowWidget(),
-        /* _exposureModeControlRowWidget(), */
-        /* _focusModeControlRowWidget(), */
-      ],
-    );
-  }
-
-  Widget _flashModeControlRowWidget() {
-    return SizeTransition(
-      sizeFactor: _flashModeControlRowAnimation,
-      child: ClipRect(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            IconButton(
-              icon: Icon(Icons.flash_off),
-              color: controller?.value.flashMode == FlashMode.off
-                  ? Colors.orange
-                  : Colors.blue,
-              onPressed: controller != null
-                  ? () => onSetFlashModeButtonPressed(FlashMode.off)
-                  : null,
-            ),
-            IconButton(
-              icon: Icon(Icons.flash_auto),
-              color: controller?.value.flashMode == FlashMode.auto
-                  ? Colors.orange
-                  : Colors.blue,
-              onPressed: controller != null
-                  ? () => onSetFlashModeButtonPressed(FlashMode.auto)
-                  : null,
-            ),
-            IconButton(
-              icon: Icon(Icons.flash_on),
-              color: controller?.value.flashMode == FlashMode.always
-                  ? Colors.orange
-                  : Colors.blue,
-              onPressed: controller != null
-                  ? () => onSetFlashModeButtonPressed(FlashMode.always)
-                  : null,
-            ),
-            IconButton(
-              icon: Icon(Icons.highlight),
-              color: controller?.value.flashMode == FlashMode.torch
-                  ? Colors.orange
-                  : Colors.blue,
-              onPressed: controller != null
-                  ? () => onSetFlashModeButtonPressed(FlashMode.torch)
-                  : null,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// Display the control bar with buttons to take pictures and record videos.
-  Widget _captureControlRowWidget() {
-    final CameraController? cameraController = controller;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.videocam),
-          color: Colors.blue,
-          onPressed: cameraController != null &&
-                  cameraController.value.isInitialized &&
-                  !cameraController.value.isRecordingVideo
-              ? onVideoRecordButtonPressed
-              : null,
-        ),
-        IconButton(
-          icon: cameraController != null &&
-                  cameraController.value.isRecordingPaused
-              ? Icon(Icons.play_arrow)
-              : Icon(Icons.pause),
-          color: Colors.blue,
-          onPressed: cameraController != null &&
-                  cameraController.value.isInitialized &&
-                  cameraController.value.isRecordingVideo
-              ? (cameraController.value.isRecordingPaused)
-                  ? onResumeButtonPressed
-                  : onPauseButtonPressed
-              : null,
-        ),
-        IconButton(
-          icon: const Icon(Icons.stop),
-          color: Colors.red,
-          onPressed: cameraController != null &&
-                  cameraController.value.isInitialized &&
-                  cameraController.value.isRecordingVideo
-              ? onStopButtonPressed
-              : null,
-        ),
-      ],
-    );
-  }
-
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   void showInSnackBar(String message) {
@@ -521,7 +402,13 @@ class _HomePageState extends State<HomePage>
         Provider.of<CaseModel>(context, listen: false).videoPath = file.path;
         Provider.of<CaseModel>(context, listen: false).videoBytes =
             await file.readAsBytes();
-
+        Provider.of<CaseModel>(context, listen: false).videoThumbnailBytes =
+            await VidThumb.VideoThumbnail.thumbnailData(
+          video: file.path,
+          imageFormat: VidThumb.ImageFormat.JPEG,
+          maxWidth: MediaQuery.of(context).size.width.truncate(),
+          quality: 100,
+        );
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => FormSendPage()));
       }

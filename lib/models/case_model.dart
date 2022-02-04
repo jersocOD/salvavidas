@@ -21,7 +21,24 @@ class CaseModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Position? _position;
+  Uint8List? _videoThumbnailBytes;
+
+  Uint8List? get videoThumbnailBytes => _videoThumbnailBytes;
+
+  set videoThumbnailBytes(newValue) {
+    _videoThumbnailBytes = newValue;
+    notifyListeners();
+  }
+
+  Position? _position = Position(
+      longitude: 0.0,
+      latitude: 0.0,
+      timestamp: DateTime.now(),
+      accuracy: 0.0,
+      altitude: 0.0,
+      heading: 0.0,
+      speed: 0.0,
+      speedAccuracy: 0.0);
   Position? get position => _position;
 
   set position(newValue) {
@@ -53,6 +70,14 @@ class CaseModel with ChangeNotifier {
 
   set observacion(newValue) {
     _observacion = newValue;
+    notifyListeners();
+  }
+
+  String _placemark = "";
+  String get placemark => _placemark;
+
+  set placemark(newValue) {
+    _placemark = newValue;
     notifyListeners();
   }
 }

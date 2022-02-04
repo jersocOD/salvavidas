@@ -42,6 +42,12 @@ class _BottomNavControllerState extends State<BottomNavController> {
   ];
 
   void _onItemTapped(int index) {
+    /*  if(index!=0){
+      cameraController.dispose();
+    }else{
+       onNewCameraSelected(cameraController.description);
+    }
+ */
     setState(() {
       _selectedIndex = index;
       title = _navigationItems[index].tooltip;
@@ -114,11 +120,10 @@ class _BottomNavControllerState extends State<BottomNavController> {
         toolbarHeight: 45,
         elevation: 0,
       ),
-      body: /* IndexedStack(
+      body: IndexedStack(
         index: _selectedIndex,
-        children:  */
-          _pages[_selectedIndex],
-      /* ), */
+        children: _pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: _navigationItems,
         currentIndex: _selectedIndex,

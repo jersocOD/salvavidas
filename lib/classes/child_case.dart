@@ -10,6 +10,7 @@ class ChildCase {
     required this.comentarios,
     required this.observacion,
     required this.timestamp,
+    required this.placemark,
   });
 
   ChildCase.fromJson(Map<String, Object?> json)
@@ -23,6 +24,7 @@ class ChildCase {
           observacion: json['observacion']! as String,
           referencia: json['referencia']! as String,
           comentarios: json['comentarios']! as String,
+          placemark: json['placemark']! as String,
           timestamp: json['timestamp']! as int,
         );
   final String userEmail;
@@ -34,6 +36,7 @@ class ChildCase {
   final String observacion;
   final String referencia;
   final String comentarios;
+  final String placemark;
   final int timestamp;
   Map<String, Object?> toJson() {
     return {
@@ -46,6 +49,7 @@ class ChildCase {
       'observacion': observacion,
       'referencia': referencia,
       'comentarios': comentarios,
+      'placemark': placemark,
       'timestamp': timestamp,
     };
   }

@@ -7,6 +7,7 @@ import 'package:report_child/controllers/firestore_case.dart';
 import 'package:report_child/models/case_model.dart';
 import 'package:report_child/styles/colors.dart';
 import 'package:report_child/styles/text_styles.dart';
+import 'package:report_child/widgets/video_preview.dart';
 import 'package:video_player/video_player.dart';
 
 class FormSendPage extends StatefulWidget {
@@ -38,8 +39,6 @@ const BoxDecoration _kDefaultRoundedBorderDecoration = BoxDecoration(
 );
 
 class _FormSendPageState extends State<FormSendPage> {
-  VideoPlayerController? videoController;
-  VoidCallback? videoPlayerListener;
   final TextEditingController tecReferencia = TextEditingController();
   final TextEditingController tecComentarios = TextEditingController();
   @override
@@ -53,7 +52,6 @@ class _FormSendPageState extends State<FormSendPage> {
       Provider.of<CaseModel>(context, listen: false).comentarios =
           tecComentarios.text;
     });
-    _startVideoPlayer();
   }
 
   @override
@@ -69,7 +67,7 @@ class _FormSendPageState extends State<FormSendPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            _thumbnailWidget(),
+            VideoPreview(),
             SizedBox(
               height: 30,
               width: double.infinity,
@@ -82,7 +80,7 @@ class _FormSendPageState extends State<FormSendPage> {
                 if (cs.videoBytes == null || cs.videoPath == null) return;
                 await CaseUploader().saveCase(context);
               },
-            )
+            ),
           ],
         ),
       ),
@@ -94,67 +92,6 @@ class _FormSendPageState extends State<FormSendPage> {
     super.dispose();
     tecComentarios.dispose();
     tecReferencia.dispose();
-  }
-
-  /// Display the thumbnail of the captured image or video.
-  Widget _thumbnailWidget() {
-    final VideoPlayerController? localVideoController = videoController;
-
-    return localVideoController == null
-        ? Padding(
-            padding: const EdgeInsets.only(top: 60),
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                CustomColors.firebaseOrange,
-              ),
-            ),
-          )
-        : Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Material(
-              elevation: 4,
-              borderRadius: BorderRadius.circular(3.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(3.0),
-                child: Container(
-                  child: AspectRatio(
-                      aspectRatio: localVideoController.value.size != null
-                          ? localVideoController.value.aspectRatio
-                          : 1.0,
-                      child: VideoPlayer(localVideoController)),
-                  decoration: BoxDecoration(
-                      /* border: Border.all(color: Colors.pink) */),
-                  height: MediaQuery.of(context).size.width * 0.6,
-                ),
-              ),
-            ),
-          );
-  }
-
-  Future<void> _startVideoPlayer() async {
-    var cs = Provider.of<CaseModel>(context, listen: false);
-    if (cs.videoBytes == null || cs.videoPath == null) return;
-
-    final VideoPlayerController vController =
-        VideoPlayerController.file(File(cs.videoPath!));
-
-    videoPlayerListener = () {
-      if (videoController != null && videoController!.value.size != null) {
-        // Refreshing the state to update video player with the correct ratio.
-        if (mounted) setState(() {});
-        videoController!.removeListener(videoPlayerListener!);
-      }
-    };
-    vController.addListener(videoPlayerListener!);
-    await vController.setLooping(true);
-    await vController.initialize();
-    await videoController?.dispose();
-    if (mounted) {
-      setState(() {
-        videoController = vController;
-      });
-    }
-    await vController.play();
   }
 }
 
@@ -266,8 +203,11 @@ class __SendButtonState extends State<_SendButton> {
   @override
   Widget build(BuildContext context) {
     return proccessing
-        ? CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFFDF6B)),
+        ? Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFFDF6B)),
+            ),
           )
         : ElevatedButton(
             style: ButtonStyle(
@@ -321,6 +261,13 @@ class _ObservacionDropDownState extends State<_ObservacionDropDown> {
     "Niño huérfano",
   ];
   int selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<CaseModel>(context, listen: false).observacion =
+        "Huérfano por Covid";
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget trailing = Platform.isIOS

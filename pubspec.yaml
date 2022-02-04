@@ -45,6 +45,7 @@ dependencies:
   provider: ^6.0.2
   image_picker: ^0.8.4+5
   geolocator: ^8.0.5
+  geocoding: ^2.0.2
   video_thumbnail: ^0.4.3
   pull_to_refresh: ^2.0.0
 dev_dependencies:

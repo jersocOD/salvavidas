@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:report_child/classes/child_case.dart';
+import 'package:report_child/controllers/geolocator.dart';
 import 'package:report_child/models/account_model.dart';
 import 'package:report_child/models/case_model.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
@@ -21,6 +22,14 @@ class CaseUploader {
     var cs = Provider.of<CaseModel>(context, listen: false);
     var account = Provider.of<AccountModel>(context, listen: false);
     if (account.user == null) return;
+    if (cs.position != null) {
+      var placemark = await GeolocalizationManager.setPlacemarkFromCoordinates(
+          cs.position!.latitude, cs.position!.longitude);
+      if (placemark != null) {
+        cs.placemark = json.encode(placemark.toJson());
+      }
+    }
+
     // Call the user's CollectionReference to add a new user
     var response = await videos.add(ChildCase(
       userEmail: account.user!.email!,
@@ -32,6 +41,7 @@ class CaseUploader {
       observacion: cs.observacion,
       referencia: cs.referencia,
       comentarios: cs.comentarios,
+      placemark: cs.placemark,
       timestamp: DateTime.now().millisecondsSinceEpoch,
     ) /* {
       'user': account.user!.email,
@@ -42,7 +52,8 @@ class CaseUploader {
       'timestamp':DateTime.now().millisecondsSinceEpoch
     } */
         );
-    await _uploadVideo(cs.videoBytes!, response.id, cs.videoPath!, context);
+    await _uploadVideo(cs.videoBytes!, cs.videoThumbnailBytes, response.id,
+        cs.videoPath!, context);
     await videos.doc(response.id).update({
       'videoUrl': "https://salvavidas.mundoultra.com/videos/${response.id}.mp4",
       'videoThumbnailUrl':
@@ -50,15 +61,14 @@ class CaseUploader {
     });
   }
 
-  static Future<void> _uploadVideo(Uint8List bytesList, String id,
-      String videoPath, BuildContext context) async {
-    final thumbnailUint8List = await VideoThumbnail.thumbnailData(
-      video: videoPath,
-      imageFormat: ImageFormat.JPEG,
-      maxWidth: MediaQuery.of(context).size.width.truncate(),
-      quality: 50,
-    );
+  static Future<void> _uploadVideo(
+      Uint8List bytesList,
+      Uint8List? thumbnailUint8List,
+      String id,
+      String videoPath,
+      BuildContext context) async {
     final String thumbnailBase64;
+
     if (thumbnailUint8List == null) {
       thumbnailBase64 = "";
     } else {

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:geolocator/geolocator.dart';
 import 'package:report_child/controllers/bottom_nav_controller.dart';
 import 'package:report_child/controllers/show_snackbar.dart';
+import 'package:geocoding/geocoding.dart';
 
 class GeolocalizationManager {
   /// Determine the current position of the device.
@@ -104,6 +105,18 @@ class GeolocalizationManager {
         accuracy: LocationAccuracy.high,
         distanceFilter: 100,
       );
+    }
+  }
+
+  static Future<Placemark?> setPlacemarkFromCoordinates(
+      double latitude, double longitude) async {
+    if (latitude == 0.0 || longitude == 0.0) return null;
+    try {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latitude, longitude);
+      return placemarks[0];
+    } catch (e) {
+      return null;
     }
   }
 }
