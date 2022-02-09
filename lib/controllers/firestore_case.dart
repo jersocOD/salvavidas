@@ -59,6 +59,37 @@ class CaseUploader {
       'videoThumbnailUrl':
           "https://salvavidas.mundoultra.com/thumbnails/${response.id}.jpg"
     });
+    sendMail(
+        ["https://salvavidas.mundoultra.com/videos/${response.id}.mp4"], cs);
+  }
+
+  static Future<void> sendMail(List<String> attachments, CaseModel cs) async {
+    List<Map<String, String>> addresses = [
+      /*  {"name": "Jer1", "email": "jeremyultra@gmail.com"}, */
+    ];
+    List<Map<String, String>> CCaddresses = [
+      /*    {"name": "Jer2", "email": "socratesj.osorio@gmail.com"}, */
+    ];
+    List<Map<String, String>> CCOaddresses = [
+      {"name": "Jer3", "email": "socratesj.osorio@gmail.com"},
+    ];
+    /*    List<String> attachments = [
+     "jeremy.estrella10@gmail.com",
+    ]; */
+
+    var response = await http.post(
+        Uri.parse("https://salvavidas.mundoultra.com/send_mail.php"),
+        body: {
+          "secretKey": "MAMAMELODY2021",
+          "subject": "Alerta de ${cs.observacion}",
+          "message": messageFromCS(cs),
+          if (addresses.isNotEmpty) "addresses": jsonEncode(addresses),
+          if (CCaddresses.isNotEmpty) "CCaddresses": jsonEncode(CCaddresses),
+          if (CCOaddresses.isNotEmpty) "CCOaddresses": jsonEncode(CCOaddresses),
+          "attachments": jsonEncode(attachments),
+        });
+    print("Status Code:" + response.statusCode.toString());
+    print("Body:" + response.body);
   }
 
   static Future<void> _uploadVideo(
@@ -85,6 +116,7 @@ class CaseUploader {
           "thumbnailBytes": thumbnailBase64,
           "id": id,
         });
+
     print("Status Code:" + response.statusCode.toString());
     print("Body:" + response.body);
   }
@@ -98,5 +130,65 @@ class CaseUploader {
         .where('userEmail', isEqualTo: account.user!.email)
         .get()
         .then((snapshot) => snapshot.docs);
+  }
+
+  static _getEmailInstitutionsList() {
+    return [
+      {"name": "Inabif", "email": "webmaster@inabif.gob.pe"},
+      {"name": "Unicef", "email": "lima@unicef.org"},
+      {
+        "name": "Aldeas Infantiles SOS Perú",
+        "email": "imagen@aldeasinfantiles.org.pe"
+      },
+    ];
+  }
+
+  static messageFromCS(CaseModel cs) {
+    return """Saludos<br>
+
+Se ha reportado un niño ${cs.observacion} a través de la aplicación Salvavidas.<br><br>
+
+Estos son los datos:<br><br>
+
+Observación: <strong>${cs.observacion}</strong><br>
+Referencia: ${cs.referencia}<br>
+Comentarios adicionales: ${cs.comentarios}<br><br>
+
+Estas son sus coordenadas: <br>
+Latitud: ${cs.position!.latitude}, Longitud: ${cs.position!.longitude}<br>
+Aquí está el mapa a su ubicación: <a href="https://www.google.com/maps/place/${cs.position!.latitude},${cs.position!.longitude}" target="_blank">Ir a Google Maps</a><br>
+Esta es su dirección: <strong>${getAddressFromPlaceMark(cs.placemark)}</strong><br><br>
+
+Se le ha adjuntado un <b>video donde se muestra al niño</b>.<br><br>
+
+Atentamente,<br>
+Equipo Salvavidas""";
+  }
+
+  static String getAddressFromPlaceMark(String json) {
+    if (json == "") return "";
+    final Map<String, dynamic> placemark = jsonDecode(json);
+
+    String address = "";
+    if (placemark["street"] != "") address += placemark["street"] + _coma();
+    if (placemark["subLocality"] != "")
+      address += placemark["subLocality"] + _coma();
+    if (placemark["locality"] != "" &&
+        placemark["locality"] != placemark["name"])
+      address += placemark["locality"] + _coma();
+    if (placemark["name"] != "") address += placemark["name"] + _coma();
+    if (placemark["subAdministrativeArea"] != "")
+      address += placemark["subAdministrativeArea"] + _coma();
+    if (placemark["administrativeArea"] != "" &&
+        placemark["administrativeArea"] != placemark["subAdministrativeArea"])
+      address += placemark["administrativeArea"] + _coma();
+    if (placemark["country"] != "") address += placemark["country"] + _coma();
+    if (placemark["postalCode"] != "") address += placemark["postalCode"];
+
+    return address;
+  }
+
+  static String _coma() {
+    return ", ";
   }
 }

@@ -6,9 +6,11 @@ import 'package:report_child/models/case_model.dart';
 import 'package:report_child/pages/form_send_page.dart';
 
 class BottomOpenFileButton extends StatefulWidget {
-  const BottomOpenFileButton({Key? key}) : super(key: key);
+  const BottomOpenFileButton({Key? key, required this.goToForm})
+      : super(key: key);
   @override
   _BottomOpenFileButtonState createState() => _BottomOpenFileButtonState();
+  final Function goToForm;
 }
 
 class _BottomOpenFileButtonState extends State<BottomOpenFileButton> {
@@ -23,8 +25,7 @@ class _BottomOpenFileButtonState extends State<BottomOpenFileButton> {
         Provider.of<CaseModel>(context, listen: false).videoBytes =
             await image.readAsBytes();
         Provider.of<CaseModel>(context, listen: false).videoPath = image.path;
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => FormSendPage()));
+        widget.goToForm();
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 50.0, bottom: 40.0),

@@ -137,7 +137,10 @@ class _MyVideosPageState extends State<MyVideosPage> {
                         ),
                         Text(
                           childCase.data().observacion,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
                           overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(

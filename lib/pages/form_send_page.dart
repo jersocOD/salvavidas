@@ -257,15 +257,13 @@ class _ObservacionDropDownState extends State<_ObservacionDropDown> {
     "Abandonado",
     "Perdido",
     "En peligro/vulnerable",
-    "Niño abandonado por padres fallecidos por Covid",
-    "Niño huérfano",
+    //"Niño abandonado por padres fallecidos por Covid",
+    "Huérfano",
   ];
   int selectedIndex = 0;
   @override
   void initState() {
     super.initState();
-    Provider.of<CaseModel>(context, listen: false).observacion =
-        "Huérfano por Covid";
   }
 
   @override

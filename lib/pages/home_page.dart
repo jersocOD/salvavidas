@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:report_child/controllers/geolocator.dart';
 import 'package:report_child/models/case_model.dart';
@@ -19,6 +20,14 @@ import 'package:report_child/widgets/bottom_open_file_button.dart';
 import 'package:report_child/widgets/record_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as VidThumb;
+
+Function? disposeCamera;
+Function? reinitCamera;
+CameraDescription? currentCamera;
+bool cameraIsDisposed = false;
+typedef positionStreamListener = void Function(Position? position);
+positionStreamListener? onPositionChanged;
+late GeolocalizationManager geolocalizationManager;
 
 class HomePage extends StatefulWidget {
   @override
@@ -35,8 +44,6 @@ void logError(String code, String? message) {
   }
 }
 
-CameraController? controller;
-
 class _HomePageState extends State<HomePage>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   XFile? imageFile;
@@ -44,12 +51,12 @@ class _HomePageState extends State<HomePage>
   VideoPlayerController? videoController;
   VoidCallback? videoPlayerListener;
   bool enableAudio = true;
-
+  CameraController? controller;
   late AnimationController _flashModeControlRowAnimationController;
 
   late AnimationController _exposureModeControlRowAnimationController;
   late AnimationController _focusModeControlRowAnimationController;
-  late GeolocalizationManager geolocalizationManager;
+
   double locationLatitude = 0.0;
   double locationLongitude = 0.0;
 
@@ -101,22 +108,22 @@ class _HomePageState extends State<HomePage>
       vsync: this,
     );
 
-    geolocalizationManager = GeolocalizationManager();
+    onPositionChanged = (position) {
+      if (position == null) {
+        showInSnackBar(
+            "Error al obtener localización. Por favor, intente más tarde.");
+        return;
+      }
+      locationLatitude = position.latitude;
+      locationLongitude = position.longitude;
 
+      Provider.of<CaseModel>(this.context, listen: false).position = position;
+      if (mounted) setState(() {});
+    };
+    geolocalizationManager = GeolocalizationManager();
     geolocalizationManager.initGeolocator().then((success) {
       if (success) {
-        geolocalizationManager.startStreaming((position) {
-          if (position == null) {
-            showInSnackBar(
-                "Error al obtener localización. Por favor, intente más tarde.");
-            return;
-          }
-          locationLatitude = position.latitude;
-          locationLongitude = position.longitude;
-          if (mounted) setState(() {});
-          Provider.of<CaseModel>(this.context, listen: false).position =
-              position;
-        });
+        geolocalizationManager.startStreaming(onPositionChanged!);
       }
     });
 
@@ -126,6 +133,9 @@ class _HomePageState extends State<HomePage>
       if (camera != null) {
         onNewCameraSelected(camera);
       }
+      disposeCamera = controller!.dispose;
+      reinitCamera = onNewCameraSelected;
+      currentCamera = camera;
     }
   }
 
@@ -139,18 +149,22 @@ class _HomePageState extends State<HomePage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final CameraController? cameraController = controller;
-
     // App state changed before we got the chance to initialize.
-    if (cameraController == null || !cameraController.value.isInitialized) {
+    if (controller == null || !controller!.value.isInitialized) {
       return;
     }
 
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused) {
-      cameraController.dispose();
+      if (onPositionChanged != null) {
+        geolocalizationManager.pauseStreaming();
+      }
+      controller!.dispose();
     } else if (state == AppLifecycleState.resumed) {
-      onNewCameraSelected(cameraController.description);
+      onNewCameraSelected(controller!.description);
+      if (onPositionChanged != null) {
+        geolocalizationManager.startStreaming(onPositionChanged!);
+      }
     }
   }
 
@@ -235,7 +249,12 @@ class _HomePageState extends State<HomePage>
                     ? () => onSetFlashModeButtonPressed(FlashMode.off)
                     : () {}),
           ),
-          Align(alignment: Alignment.bottomLeft, child: BottomOpenFileButton()),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: BottomOpenFileButton(
+              goToForm: goToForm,
+            ),
+          ),
 
           /*  _captureControlRowWidget(), */
           /*  _modeControlRowWidget(), */
@@ -322,33 +341,30 @@ class _HomePageState extends State<HomePage>
       await controller!.dispose();
     }
 
-    final CameraController cameraController = CameraController(
+    controller = CameraController(
       cameraDescription,
       ResolutionPreset.max,
       enableAudio: enableAudio,
       imageFormatGroup: ImageFormatGroup.jpeg,
     );
 
-    controller = cameraController;
-
     // If the controller is updated then update the UI.
-    cameraController.addListener(() {
+    controller!.addListener(() {
       if (mounted) setState(() {});
-      if (cameraController.value.hasError) {
-        showInSnackBar(
-            'Camera error ${cameraController.value.errorDescription}');
+      if (controller!.value.hasError) {
+        showInSnackBar('Camera error ${controller!.value.errorDescription}');
       }
     });
 
     try {
-      await cameraController.initialize();
+      await controller!.initialize();
       await Future.wait([
         // The exposure mode is currently not supported on the web.
 
-        cameraController
+        controller!
             .getMaxZoomLevel()
             .then((value) => _maxAvailableZoom = value),
-        cameraController
+        controller!
             .getMinZoomLevel()
             .then((value) => _minAvailableZoom = value),
       ]);
@@ -409,10 +425,18 @@ class _HomePageState extends State<HomePage>
           maxWidth: MediaQuery.of(context).size.width.truncate(),
           quality: 100,
         );
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => FormSendPage()));
+        goToForm();
       }
     });
+  }
+
+  Future<void> goToForm() async {
+    await disposeCamera!();
+    await geolocalizationManager.pauseStreaming();
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => FormSendPage()));
+    reinitCamera!(currentCamera);
+    geolocalizationManager.startStreaming(onPositionChanged!);
   }
 
   Future<void> onPausePreviewButtonPressed() async {

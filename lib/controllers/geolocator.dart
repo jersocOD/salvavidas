@@ -12,7 +12,9 @@ class GeolocalizationManager {
   /// are denied the `Future` will return an error.
   ///
   late final LocationSettings locationSettings;
-  late StreamSubscription<Position> positionStream;
+  StreamSubscription<Position>? positionStream;
+  bool _initialized = false;
+  bool _streaming = false;
   Future<bool> initGeolocator({bool alreadyCalled = false}) async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -76,13 +78,32 @@ class GeolocalizationManager {
       }
     }
     _getLocationSettings();
+    _initialized = true;
     return true;
   }
 
   startStreaming(_onPositionChanged onPositionChanged) {
+    if (!_initialized) return;
+    if (_streaming) return;
+    if (positionStream != null) {
+      if (positionStream!.isPaused) {
+        positionStream!.resume();
+        return;
+      }
+    }
     positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen(onPositionChanged);
+    _streaming = true;
+  }
+
+  pauseStreaming() {
+    if (!_initialized) return;
+    if (!_streaming) return;
+    if (positionStream != null) {
+      positionStream!.pause();
+    }
+    _streaming = false;
   }
 
   void _getLocationSettings() {

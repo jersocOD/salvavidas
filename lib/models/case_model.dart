@@ -64,7 +64,7 @@ class CaseModel with ChangeNotifier {
     notifyListeners();
   }
 
-  String _observacion = "";
+  String _observacion = "Huérfano por Covid";
 
   String get observacion => _observacion;
 

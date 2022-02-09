@@ -42,12 +42,20 @@ class _BottomNavControllerState extends State<BottomNavController> {
   ];
 
   void _onItemTapped(int index) {
-    /*  if(index!=0){
-      cameraController.dispose();
-    }else{
-       onNewCameraSelected(cameraController.description);
+    if (index != 0) {
+      if (disposeCamera != null && !cameraIsDisposed) {
+        disposeCamera!();
+        geolocalizationManager.pauseStreaming();
+        cameraIsDisposed = true;
+      }
+    } else {
+      if (reinitCamera != null && currentCamera != null && cameraIsDisposed) {
+        cameraIsDisposed = false;
+        geolocalizationManager.startStreaming(onPositionChanged!);
+        reinitCamera!(currentCamera);
+      }
     }
- */
+
     setState(() {
       _selectedIndex = index;
       title = _navigationItems[index].tooltip;
