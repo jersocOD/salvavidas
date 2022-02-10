@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:report_child/controllers/bottom_nav_controller.dart';
 import 'package:report_child/controllers/show_snackbar.dart';
@@ -25,8 +26,7 @@ class GeolocalizationManager {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
-      showInSnackBar(
-          "Para poder localizar al niño, se necesita acceso a su localización. Por favor, le pedimos que active la localización.",
+      showInSnackBar(translate('LocationSettings.ActivateLocationMessage'),
           navBarControllerKey);
 
       await Future.delayed(Duration(seconds: 5));
@@ -49,7 +49,7 @@ class GeolocalizationManager {
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         showInSnackBar(
-            "Para poder localizar al niño, se necesita acceso a su localización. Por favor, le pedimos que active los permisos.",
+            translate('LocationSettings.ActivateLocationPermsMessage'),
             navBarControllerKey);
         await Future.delayed(Duration(seconds: 5));
         if (!alreadyCalled) {
@@ -64,7 +64,7 @@ class GeolocalizationManager {
       // Permissions are denied forever, handle appropriately.
       if (!alreadyCalled) {
         showInSnackBar(
-            "Para poder localizar al niño, se necesita acceso a su localización. Por favor, le pedimos que active los permisos.",
+            translate('LocationSettings.ActivateLocationPermsMessage'),
             navBarControllerKey);
         if (await Geolocator.openAppSettings()) {
           await Future.delayed(Duration(minutes: 1));
@@ -73,11 +73,12 @@ class GeolocalizationManager {
         }
       } else {
         showInSnackBar(
-            "Para poder localizar al niño, se necesita acceso a su localización. Por favor, le pedimos que active los permisos.",
+            translate('LocationSettings.ActivateLocationPermsMessage'),
             navBarControllerKey);
       }
     }
     _getLocationSettings();
+    LocationData = await location.getLocation();
     _initialized = true;
     return true;
   }

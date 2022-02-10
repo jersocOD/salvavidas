@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 import 'package:report_child/controllers/firestore_case.dart';
+import 'package:report_child/controllers/observaciones_types.dart';
 import 'package:report_child/models/case_model.dart';
 import 'package:report_child/styles/colors.dart';
 import 'package:report_child/styles/text_styles.dart';
@@ -59,7 +61,8 @@ class _FormSendPageState extends State<FormSendPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: Text("Last Step", style: Styles.appBarTitleStyle),
+        title: Text(translate('FormPage.LastStep'),
+            style: Styles.appBarTitleStyle),
         backgroundColor: Color(0xFF6C63FF),
       ),
       body: SingleChildScrollView(
@@ -121,14 +124,14 @@ class _Form extends StatelessWidget {
             SizedBox(height: 20),
             _CustomTextField(
               tec: tecReferencia,
-              title: "Referencia",
-              placeholder: "Calle, Urbanización, Distrito, Lugar cercano.",
+              title: translate('ChildCase.Reference'),
+              placeholder: translate('FormPage.ReferencePlaceholder'),
             ),
             SizedBox(height: 20),
             _CustomTextField(
               tec: tecComentarios,
-              title: "Comentarios",
-              placeholder: "Nombre(si se conoce), Estado del niño",
+              title: translate('ChildCase.Comments'),
+              placeholder: translate('FormPage.CommentsPlaceholder'),
             ),
             SizedBox(
               height: 10,
@@ -233,7 +236,7 @@ class __SendButtonState extends State<_SendButton> {
             child: Padding(
               padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
               child: Text(
-                'Enviar Video',
+                translate('FormPage.SendVideoButton'),
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -252,14 +255,7 @@ class _ObservacionDropDown extends StatefulWidget {
 }
 
 class _ObservacionDropDownState extends State<_ObservacionDropDown> {
-  List<String> observaciones = [
-    "Huérfano por Covid",
-    "Abandonado",
-    "Perdido",
-    "En peligro/vulnerable",
-    //"Niño abandonado por padres fallecidos por Covid",
-    "Huérfano",
-  ];
+  Observaciones obs = Observaciones();
   int selectedIndex = 0;
   @override
   void initState() {
@@ -268,26 +264,30 @@ class _ObservacionDropDownState extends State<_ObservacionDropDown> {
 
   @override
   Widget build(BuildContext context) {
+    obs.getMapIntl();
     Widget trailing = Platform.isIOS
         ? Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: Text(
-              observaciones[selectedIndex],
+              obs.observacionesIntl[selectedIndex],
               style: TextStyle(color: Colors.black),
             ),
           )
-        : _pickerButton(observaciones[selectedIndex], observaciones, (value) {
+        : _pickerButton(
+            obs.observacionesIntl[selectedIndex], obs.observacionesIntl,
+            (value) {
             setState(() {
-              selectedIndex = observaciones.indexOf(value);
+              selectedIndex = obs.observacionesIntl.indexOf(value);
             });
-            Provider.of<CaseModel>(context, listen: false).observacion = value;
+            Provider.of<CaseModel>(context, listen: false).observacion =
+                Observaciones.observaciones[selectedIndex];
           });
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: [
-        Text("Observación"),
+        Text(translate('ChildCase.Type')),
         SizedBox(
           width: 15,
         ),
@@ -295,13 +295,14 @@ class _ObservacionDropDownState extends State<_ObservacionDropDown> {
           child: GestureDetector(
             onTap: Platform.isIOS
                 ? () async {
-                    await _showPicker(selectedIndex, observaciones, (value) {
+                    await _showPicker(selectedIndex, obs.observacionesIntl,
+                        (value) {
                       setState(() {
                         selectedIndex = value;
                       });
                     });
                     Provider.of<CaseModel>(context, listen: false).observacion =
-                        selectedIndex;
+                        Observaciones.observaciones[selectedIndex];
                   }
                 : null,
             child: Platform.isIOS

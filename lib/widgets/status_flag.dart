@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 class StatusFlag extends StatelessWidget {
   final String status;
@@ -28,9 +29,10 @@ class StatusFlag extends StatelessWidget {
 
   String _getLabelFromStatus(String status) {
     if (status == "In Progress") {
-      return "En Progreso";
-    } else if (status == "Attended") return "Atendido";
-    return "Revisándose";
+      return translate('ChildCase.Status.InProgress');
+    } else if (status == "Attended")
+      return translate('ChildCase.Status.Attended');
+    return translate('ChildCase.Status.InReview');
   }
 
   Color _getColorFromStatus(String status) {

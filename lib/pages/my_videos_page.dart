@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:report_child/classes/child_case.dart';
@@ -60,9 +61,9 @@ class _MyVideosPageState extends State<MyVideosPage> {
       enablePullUp: false,
       header: Platform.isIOS
           ? ClassicHeader(
-              completeText: "¡Actualizado!",
-              releaseText: "Actualizar",
-              refreshingText: "Actualizando",
+              releaseText: translate('MyVideosPage.Loading.Refresh'),
+              refreshingText: translate('MyVideosPage.Loading.Loading'),
+              completeText: translate('MyVideosPage.Loading.Updated'),
             )
           : MaterialClassicHeader(
               offset: -20,

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -67,7 +68,7 @@ class _FacebookSignInButtonState extends State<FacebookSignInButton> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Text(
-                        'Sign in with Facebook',
+                        translate('SignInPage.SignInWithFacebook'),
                         style: GoogleFonts.roboto().copyWith(
                           fontSize: 16,
                           color: Colors.white,

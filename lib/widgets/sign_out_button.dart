@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:report_child/controllers/authentication.dart';
 import 'package:report_child/pages/sign_in_page.dart';
 
@@ -39,7 +40,7 @@ class _SignOutButtonState extends State<SignOutButton> {
             child: Padding(
               padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
               child: Text(
-                'Sign Out',
+                translate('AccountPage.SignOut'),
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

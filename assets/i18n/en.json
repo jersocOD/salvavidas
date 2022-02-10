@@ -1,0 +1,65 @@
+{
+  "button": {
+    "cancel": "Cancel",
+    "change_language": "Change Language"
+  },
+  "Language": {
+    "label": "Language:",
+    "name": {
+      "en": "English",
+      "es": "Spanish"
+    }
+  },
+
+  "Pages": {
+    "Record": "Record",
+    "MyVideos": "My Videos",
+    "Account": "Account"
+  },
+  "SignInPage": {
+    "SignInWithGoogle": "Sign in with Google",
+    "SignInWithFacebook": "Sign in with Facebook"
+  },
+  "MyVideosPage": {
+    "Loading": {
+      "Refresh": "Refresh",
+      "Loading": "Loading",
+      "Updated": "Updated!"
+    }
+  },
+  "HomePage": {
+    "OrientationMessage": "Record a video of the abandoned or vulnerable child to report them to welfare institution. We will keep you informed of how the child was helped."
+  },
+  "AccountPage": {
+    "Hello": "Hello {name}!",
+    "SignOutPrompt": "You are now signed in using your Google account. To sign out of your account click the \"Sign Out\" button below.",
+    "SignOut": "Logout"
+  },
+  "FormPage": {
+    "ReferencePlaceholder": "Street, Urbanization, District, Nearby place.",
+    "CommentsPlaceholder": "Child's Name(if known), Status",
+    "SendVideoButton": "Send Video",
+    "LastStep": "Last Step"
+  },
+  "ChildCase": {
+    "Status": {
+      "InProgress": "In Progress",
+      "InReview": "In Review",
+      "Attended": "Attended"
+    },
+    "Type": "Observation",
+    "Reference": "Reference",
+    "Comments": "Comments",
+    "Types": {
+      "OrphanedByCovid": "Orphaned by Covid",
+      "Abandoned": "Abandoned/Homeless",
+      "Lost": "Lost",
+      "Endangered/Vulnerable": "Endangered/Vulnerable",
+      "Orphan": "Orphan"
+    }
+  },
+  "LocationSettings": {
+    "ActivateLocationMessage": "In order to locate the child, access to their location is needed. Please activate location.",
+    "ActivateLocationPermsMessage": "In order to locate the child, access to her their is needed. Please activate permissions."
+  }
+}

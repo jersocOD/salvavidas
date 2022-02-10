@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:report_child/controllers/bottom_nav_controller.dart';
@@ -65,7 +66,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Text(
-                        'Sign in with Google',
+                        translate('SignInPage.SignInWithGoogle'),
                         style: GoogleFonts.roboto().copyWith(
                           fontSize: 16,
                           color: Colors.black,

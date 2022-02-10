@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:report_child/controllers/observaciones_types.dart';
 
 class CaseModel with ChangeNotifier {
   String? _videoPath;
@@ -64,7 +65,7 @@ class CaseModel with ChangeNotifier {
     notifyListeners();
   }
 
-  String _observacion = "Huérfano por Covid";
+  String _observacion = Observaciones.observaciones[0];
 
   String get observacion => _observacion;
 

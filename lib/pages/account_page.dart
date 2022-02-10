@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 import 'package:report_child/models/account_model.dart';
 
 import 'package:report_child/styles/colors.dart';
+import 'package:report_child/widgets/language_drop_down.dart';
 import 'package:report_child/widgets/sign_out_button.dart';
 
 class AccountPage extends StatefulWidget {
@@ -59,7 +61,8 @@ class _AccountPageState extends State<AccountPage> {
               /* Row(
                 children: [ */
               Text(
-                'Hello ${_user.displayName!}!',
+                translate('AccountPage.Hello',
+                    args: {"name": _user.displayName!}),
                 style: TextStyle(
                   color: Color(0xFF23049D),
                   fontSize: 26,
@@ -85,8 +88,12 @@ class _AccountPageState extends State<AccountPage> {
                 ),
               ),
               SizedBox(height: 24.0),
+              LanguageDropDown(setState: () {
+                setState(() {});
+              }),
+              SizedBox(height: 24.0),
               Text(
-                'You are now signed in using your Google account. To sign out of your account click the "Sign Out" button below.',
+                translate('AccountPage.SignOutPrompt'),
                 style: TextStyle(
                   color: Color(0xFF23049D).withOpacity(0.8),
                   fontSize: 14,

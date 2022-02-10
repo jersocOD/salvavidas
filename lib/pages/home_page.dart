@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:report_child/controllers/geolocator.dart';
@@ -206,10 +207,11 @@ class _HomePageState extends State<HomePage>
               children: [
                 Container(
                   height: 95,
+                  padding: EdgeInsets.symmetric(horizontal: 8),
                   width: double.infinity,
                   child: Center(
                     child: Text(
-                      "Grabe un video del niño abandonado o en problemas para reportarlo a las instituciones de ayuda. Lo mantendremos informado de cómo se le ayudó al niño.",
+                      translate('HomePage.OrientationMessage'),
                       style: TextStyle(color: Colors.white, fontSize: 14),
                       textAlign: TextAlign.center,
                     ),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:report_child/classes/child_case.dart';
 import 'dart:io';
 
@@ -99,17 +100,17 @@ class _Form extends StatelessWidget {
             ),
             SizedBox(height: 20),
             _CustomTextRow(
-              title: "Observación:",
+              title: translate('ChildCase.Type') + ":",
               text: childCase.observacion,
             ),
             SizedBox(height: 20),
             _CustomTextRow(
-              title: "Referencia:",
+              title: translate('ChildCase.Reference') + ":",
               text: childCase.referencia,
             ),
             SizedBox(height: 20),
             _CustomTextRow(
-              title: "Comentarios:",
+              title: translate('ChildCase.Comments') + ":",
               text: childCase.comentarios,
             ),
             SizedBox(

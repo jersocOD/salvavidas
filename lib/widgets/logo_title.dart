@@ -12,7 +12,7 @@ class LogoTitle extends StatelessWidget {
               semanticsLabel: 'Children Jumping'),
           SizedBox(height: 20),
           Text(
-            "Help a Child",
+            "Salvavidas",
             style: Styles.appBarTitleStyle
                 .copyWith(fontSize: 40.0, color: Colors.white),
             textAlign: TextAlign.center,

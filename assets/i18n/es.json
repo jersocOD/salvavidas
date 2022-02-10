@@ -1,0 +1,64 @@
+{
+  "button": {
+    "cancel": "Cancelar",
+    "change_language": "Cambiar idioma"
+  },
+  "Language": {
+    "label": "Idioma:",
+    "name": {
+      "en": "Inglés",
+      "es": "Español"
+    }
+  },
+  "Pages": {
+    "Record": "Grabar",
+    "MyVideos": "Mis Videos",
+    "Account": "Cuenta"
+  },
+  "SignInPage": {
+    "SignInWithGoogle": "Iniciar sesión con Google",
+    "SignInWithFacebook": "Iniciar sesión con Facebook"
+  },
+  "MyVideosPage": {
+    "Loading": {
+      "Refresh": "Actualizar",
+      "Loading": "Actualizando",
+      "Updated": "¡Actualizado!"
+    }
+  },
+  "HomePage": {
+    "OrientationMessage": "Grabe un video del niño abandonado o en problemas para reportarlo a las instituciones de ayuda. Lo mantendremos informado de cómo se le ayudó al niño."
+  },
+  "AccountPage": {
+    "Hello": "Hola {name}!",
+    "SignOutPrompt": "Ha iniciado sesión con su cuenta de Google. Para cerrar sesión en su cuenta, haga clic en el botón \"Cerrar sesión\".",
+    "SignOut": "Cerrar Sesión"
+  },
+  "FormPage": {
+    "ReferencePlaceholder": "Calle, Urbanización, Distrito, Lugar cercano.",
+    "CommentsPlaceholder": "Nombre(si se conoce), Estado del niño",
+    "SendVideoButton": "Enviar Video",
+    "LastStep": "Solo un paso más"
+  },
+  "ChildCase": {
+    "Status": {
+      "InProgress": "En Progreso",
+      "InReview": "Revisándose",
+      "Attended": "Atendido"
+    },
+    "Type": "Observación",
+    "Reference": "Referencia",
+    "Comments": "Comentarios",
+    "Types": {
+      "OrphanedByCovid": "Huérfano por Covid",
+      "Abandoned": "Abandonado/Sin Hogar",
+      "Lost": "Perdido",
+      "Endangered/Vulnerable": "En peligro/Vulnerable",
+      "Orphan": "Huérfano"
+    }
+  },
+  "LocationSettings": {
+    "ActivateLocationMessage": "Para poder localizar al niño, se necesita acceso a su localización. Por favor, le pedimos que active la localización.",
+    "ActivateLocationPermsMessage": "Para poder localizar al niño, se necesita acceso a su localización. Por favor, le pedimos que active los permisos."
+  }
+}

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 import 'package:report_child/controllers/permissions_handler.dart';
 import 'package:report_child/models/account_model.dart';
@@ -24,21 +25,26 @@ class BottomNavController extends StatefulWidget {
 
 class _BottomNavControllerState extends State<BottomNavController> {
   int _selectedIndex = 0;
-  String? title = "Help a child";
+  String? title = "Salvavidas";
   static List<Widget> _pages = <Widget>[
     HomePage(),
   ];
 
-  static const List<BottomNavigationBarItem> _navigationItems =
-      <BottomNavigationBarItem>[
+  List<BottomNavigationBarItem> _navigationItems = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
-        icon: Icon(Icons.videocam), label: 'Record', tooltip: 'Help a child'),
+        icon: Icon(Icons.videocam),
+        label: translate('Pages.Record'),
+        tooltip: "Salvavidas"),
     BottomNavigationBarItem(
-        icon: FaIcon(FontAwesomeIcons.child),
-        label: 'My Videos',
-        tooltip: 'My Videos'),
+      icon: FaIcon(FontAwesomeIcons.child),
+      label: translate('Pages.MyVideos'),
+      tooltip: translate('Pages.MyVideos'),
+    ),
     BottomNavigationBarItem(
-        icon: Icon(Icons.person), label: 'Account', tooltip: 'Account'),
+      icon: Icon(Icons.person),
+      label: translate('Pages.Account'),
+      tooltip: translate('Pages.Account'),
+    ),
   ];
 
   void _onItemTapped(int index) {
@@ -105,7 +111,7 @@ class _BottomNavControllerState extends State<BottomNavController> {
       } else {
         _pages = <Widget>[
           HomePage(),
-          Text('My Videos', style: Styles.optionStyle),
+          MyVideosPage(),
           AccountPage(),
         ];
         setState(() {});
@@ -115,6 +121,22 @@ class _BottomNavControllerState extends State<BottomNavController> {
 
   @override
   Widget build(BuildContext context) {
+    _navigationItems = <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+          icon: Icon(Icons.videocam),
+          label: translate('Pages.Record'),
+          tooltip: "Salvavidas"),
+      BottomNavigationBarItem(
+        icon: FaIcon(FontAwesomeIcons.child),
+        label: translate('Pages.MyVideos'),
+        tooltip: translate('Pages.MyVideos'),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: translate('Pages.Account'),
+        tooltip: translate('Pages.Account'),
+      ),
+    ];
     return Scaffold(
       key: navBarControllerKey,
       appBar: AppBar(
