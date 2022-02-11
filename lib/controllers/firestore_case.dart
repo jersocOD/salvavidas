@@ -64,7 +64,7 @@ class CaseUploader {
   }
 
   static Future<void> sendMail(List<String> attachments, CaseModel cs) async {
-    List<Map<String, String>> addresses = [
+/*     List<Map<String, String>> addresses = [
       /*  {"name": "Jer1", "email": "jeremyultra@gmail.com"}, */
     ];
     List<Map<String, String>> CCaddresses = [
@@ -75,17 +75,18 @@ class CaseUploader {
     ];
     /*    List<String> attachments = [
      "jeremy.estrella10@gmail.com",
-    ]; */
-
+    ]; */ */
+    var list = await _getEmailsList();
     var response = await http.post(
         Uri.parse("https://salvavidas.mundoultra.com/send_mail.php"),
         body: {
           "secretKey": "MAMAMELODY2021",
           "subject": "Alerta de ${cs.observacion}",
           "message": messageFromCS(cs),
-          if (addresses.isNotEmpty) "addresses": jsonEncode(addresses),
-          if (CCaddresses.isNotEmpty) "CCaddresses": jsonEncode(CCaddresses),
-          if (CCOaddresses.isNotEmpty) "CCOaddresses": jsonEncode(CCOaddresses),
+          if (list["PRIMARY"].isNotEmpty)
+            "addresses": jsonEncode(list["PRIMARY"]),
+          if (list["CC"].isNotEmpty) "CCaddresses": jsonEncode(list["CC"]),
+          if (list["BCC"].isNotEmpty) "CCOaddresses": jsonEncode(list["BCC"]),
           "attachments": jsonEncode(attachments),
         });
     print("Status Code:" + response.statusCode.toString());
@@ -132,18 +133,34 @@ class CaseUploader {
         .then((snapshot) => snapshot.docs);
   }
 
-  static _getEmailInstitutionsList() {
-    return [
+  static Future<Map<String, dynamic>> _getEmailsList() async {
+    var response = await http
+        .get(Uri.parse("https://salvavidas.mundoultra.com/recipients.json"));
+
+    return jsonDecode(response.body) as Map<String, dynamic>;
+
+/*     return [
       {"name": "Inabif", "email": "webmaster@inabif.gob.pe"},
       {"name": "Unicef", "email": "lima@unicef.org"},
       {
         "name": "Aldeas Infantiles SOS Perú",
         "email": "imagen@aldeasinfantiles.org.pe"
       },
-    ];
+    ]; */
   }
 
-  static messageFromCS(CaseModel cs) {
+  static Future<String> messageFromCS(CaseModel cs) async {
+    var response = await http.get(
+        Uri.parse("https://salvavidas.mundoultra.com/mail-templates/es.html"));
+    String mailData = response.body;
+/* 
+    mailData=mailData.replaceFirst(from, cs.observacion);
+    mailData=mailData.replaceFirst(from, cs.referencia);
+    mailData=mailData.replaceFirst(from, cs.comentarios);
+    mailData=mailData.replaceFirst(from, cs.position!.latitude);
+    mailData=mailData.replaceFirst(from, cs.position!.longitude);
+    mailData=mailData.replaceFirst(from, getAddressFromPlaceMark(cs.placemark)); */
+
     return """Saludos<br>
 
 Se ha reportado un niño ${cs.observacion} a través de la aplicación Salvavidas.<br><br>

@@ -8,7 +8,6 @@ import 'package:report_child/models/case_model.dart';
 import 'package:report_child/pages/home_page.dart';
 import 'package:report_child/pages/sign_in_page.dart';
 import 'package:provider/provider.dart';
-import 'controllers/bottom_nav_controller.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 void main() async {

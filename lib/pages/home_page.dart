@@ -5,10 +5,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'dart:async';
-import 'dart:io';
-
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:geolocator/geolocator.dart';
@@ -19,6 +16,7 @@ import 'package:report_child/pages/form_send_page.dart';
 import 'package:report_child/widgets/bottom_light_button.dart';
 import 'package:report_child/widgets/bottom_open_file_button.dart';
 import 'package:report_child/widgets/record_button.dart';
+import 'package:report_child/widgets/timer.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as VidThumb;
 
@@ -28,7 +26,6 @@ CameraDescription? currentCamera;
 bool cameraIsDisposed = false;
 typedef positionStreamListener = void Function(Position? position);
 positionStreamListener? onPositionChanged;
-late GeolocalizationManager geolocalizationManager;
 
 class HomePage extends StatefulWidget {
   @override
@@ -54,12 +51,12 @@ class _HomePageState extends State<HomePage>
   bool enableAudio = true;
   CameraController? controller;
   late AnimationController _flashModeControlRowAnimationController;
-
+  late GeolocalizationManager geolocalizationManager;
   late AnimationController _exposureModeControlRowAnimationController;
   late AnimationController _focusModeControlRowAnimationController;
-
-  double locationLatitude = 0.0;
-  double locationLongitude = 0.0;
+  late TimerController timerController;
+/*   double locationLatitude = 0.0;
+  double locationLongitude = 0.0; */
 
   double _minAvailableZoom = 1.0;
   double _maxAvailableZoom = 1.0;
@@ -109,6 +106,8 @@ class _HomePageState extends State<HomePage>
       vsync: this,
     );
 
+    timerController = TimerController(this);
+/* 
     onPositionChanged = (position) {
       if (position == null) {
         showInSnackBar(
@@ -120,11 +119,13 @@ class _HomePageState extends State<HomePage>
 
       Provider.of<CaseModel>(this.context, listen: false).position = position;
       if (mounted) setState(() {});
-    };
+    }; */
     geolocalizationManager = GeolocalizationManager();
     geolocalizationManager.initGeolocator().then((success) {
       if (success) {
-        geolocalizationManager.startStreaming(onPositionChanged!);
+        geolocalizationManager.getCurrentLocation(context);
+        if (mounted) setState(() {});
+        /*  geolocalizationManager.startStreaming(onPositionChanged!); */
       }
     });
 
@@ -145,6 +146,7 @@ class _HomePageState extends State<HomePage>
     _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
     _flashModeControlRowAnimationController.dispose();
     _exposureModeControlRowAnimationController.dispose();
+    timerController.dispose();
     super.dispose();
   }
 
@@ -155,17 +157,10 @@ class _HomePageState extends State<HomePage>
       return;
     }
 
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused) {
-      if (onPositionChanged != null) {
-        geolocalizationManager.pauseStreaming();
-      }
+    if (state == AppLifecycleState.inactive) {
       controller!.dispose();
     } else if (state == AppLifecycleState.resumed) {
       onNewCameraSelected(controller!.description);
-      if (onPositionChanged != null) {
-        geolocalizationManager.startStreaming(onPositionChanged!);
-      }
     }
   }
 
@@ -173,6 +168,8 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    final pos = Provider.of<CaseModel>(context).position;
+
     final CameraController? cameraController = controller;
     return Scaffold(
       key: _scaffoldKey,
@@ -183,16 +180,30 @@ class _HomePageState extends State<HomePage>
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              alignment: Alignment.centerLeft,
               height: 40,
               width: double.infinity,
-              padding: EdgeInsets.only(left: 10),
-              child: Row(
+              child: Stack(
                 children: [
-                  Text(
-                    "Lat: $locationLatitude, Long: $locationLongitude",
-                    style: TextStyle(color: Colors.white60, fontSize: 12),
-                    textAlign: TextAlign.left,
+                  Positioned(
+                    left: 10,
+                    top: 0,
+                    bottom: 0,
+                    child: Center(
+                      child: Text(
+                        "Lat: ${pos!.latitude}, Long: ${pos.longitude}",
+                        style: TextStyle(color: Colors.white60, fontSize: 12),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 10,
+                    top: 0,
+                    bottom: 0,
+                    child: VideoTimer(
+                      timerController: timerController,
+                      duration: Duration(seconds: 30),
+                    ),
                   ),
                 ],
               ),
@@ -389,13 +400,6 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  void onAudioModeButtonPressed() {
-    enableAudio = !enableAudio;
-    if (controller != null) {
-      onNewCameraSelected(controller!.description);
-    }
-  }
-
   void onSetFlashModeButtonPressed(FlashMode mode) {
     setFlashMode(mode).then((_) {
       if (mounted) setState(() {});
@@ -403,10 +407,14 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  void onVideoRecordButtonPressed() {
-    startVideoRecording().then((_) {
-      if (mounted) setState(() {});
-    });
+  Future<void> onVideoRecordButtonPressed() async {
+    startVideoRecording();
+    timerController.start();
+    if (mounted) setState(() {});
+
+    await Future.delayed(Duration(seconds: 30));
+    timerController.stop();
+    onStopButtonPressed();
   }
 
   void onStopButtonPressed() {
@@ -433,12 +441,17 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> goToForm() async {
-    await disposeCamera!();
-    await geolocalizationManager.pauseStreaming();
-    Navigator.of(context)
+    timerController.pause();
+    await geolocalizationManager.getCurrentLocation(context);
+
+    //await disposeCamera!();
+    await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => FormSendPage()));
-    reinitCamera!(currentCamera);
-    geolocalizationManager.startStreaming(onPositionChanged!);
+
+    //reinitCamera!(currentCamera);
+
+    timerController.reset();
+    if (mounted) setState(() {});
   }
 
   Future<void> onPausePreviewButtonPressed() async {
@@ -549,35 +562,6 @@ class _HomePageState extends State<HomePage>
       _showCameraException(e);
       rethrow;
     }
-  }
-
-  Future<void> _startVideoPlayer() async {
-    if (videoFile == null) {
-      return;
-    }
-
-    final VideoPlayerController vController = kIsWeb
-        ? VideoPlayerController.network(videoFile!.path)
-        : VideoPlayerController.file(File(videoFile!.path));
-
-    videoPlayerListener = () {
-      if (videoController != null && videoController!.value.size != null) {
-        // Refreshing the state to update video player with the correct ratio.
-        if (mounted) setState(() {});
-        videoController!.removeListener(videoPlayerListener!);
-      }
-    };
-    vController.addListener(videoPlayerListener!);
-    await vController.setLooping(true);
-    await vController.initialize();
-    await videoController?.dispose();
-    if (mounted) {
-      setState(() {
-        imageFile = null;
-        videoController = vController;
-      });
-    }
-    await vController.play();
   }
 
   void _showCameraException(CameraException e) {

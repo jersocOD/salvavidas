@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +7,6 @@ import 'package:report_child/models/account_model.dart';
 import 'package:report_child/pages/account_page.dart';
 import 'package:report_child/pages/my_videos_page.dart';
 import 'package:report_child/pages/sign_in_page.dart';
-import 'package:report_child/widgets/sign_out_button.dart';
 import '../pages/home_page.dart';
 import '../styles/text_styles.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -48,19 +46,19 @@ class _BottomNavControllerState extends State<BottomNavController> {
   ];
 
   void _onItemTapped(int index) {
-    if (index != 0) {
+/*     if (index != 0) {
       if (disposeCamera != null && !cameraIsDisposed) {
         disposeCamera!();
-        geolocalizationManager.pauseStreaming();
+        /*   geolocalizationManager.pauseStreaming(); */
         cameraIsDisposed = true;
       }
     } else {
       if (reinitCamera != null && currentCamera != null && cameraIsDisposed) {
         cameraIsDisposed = false;
-        geolocalizationManager.startStreaming(onPositionChanged!);
+        /*  geolocalizationManager.startStreaming(onPositionChanged!); */
         reinitCamera!(currentCamera);
       }
-    }
+    } */
 
     setState(() {
       _selectedIndex = index;

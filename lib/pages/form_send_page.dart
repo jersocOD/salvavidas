@@ -7,10 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:report_child/controllers/firestore_case.dart';
 import 'package:report_child/controllers/observaciones_types.dart';
 import 'package:report_child/models/case_model.dart';
-import 'package:report_child/styles/colors.dart';
 import 'package:report_child/styles/text_styles.dart';
 import 'package:report_child/widgets/video_preview.dart';
-import 'package:video_player/video_player.dart';
 
 class FormSendPage extends StatefulWidget {
   @override

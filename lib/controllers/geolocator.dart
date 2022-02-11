@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:report_child/controllers/bottom_nav_controller.dart';
 import 'package:report_child/controllers/show_snackbar.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:report_child/models/case_model.dart';
 
 class GeolocalizationManager {
   /// Determine the current position of the device.
@@ -15,7 +18,8 @@ class GeolocalizationManager {
   late final LocationSettings locationSettings;
   StreamSubscription<Position>? positionStream;
   bool _initialized = false;
-  bool _streaming = false;
+/*   bool _streaming = false; */
+
   Future<bool> initGeolocator({bool alreadyCalled = false}) async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -78,11 +82,30 @@ class GeolocalizationManager {
       }
     }
     _getLocationSettings();
-    LocationData = await location.getLocation();
+
     _initialized = true;
     return true;
   }
 
+  Future<bool> getCurrentLocation(BuildContext context) async {
+    try {
+      Provider.of<CaseModel>(context, listen: false).position =
+          await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high,
+              timeLimit: Duration(seconds: 30));
+
+      return true;
+    } catch (e) {
+      Position? p = await Geolocator.getLastKnownPosition();
+      if (p == null) {
+        return false;
+      }
+      Provider.of<CaseModel>(context, listen: false).position = p;
+      return true;
+    }
+  }
+
+/* 
   startStreaming(_onPositionChanged onPositionChanged) {
     if (!_initialized) return;
     if (_streaming) return;
@@ -106,7 +129,7 @@ class GeolocalizationManager {
     }
     _streaming = false;
   }
-
+ */
   void _getLocationSettings() {
     if (Platform.isAndroid) {
       locationSettings = AndroidSettings(
@@ -143,4 +166,4 @@ class GeolocalizationManager {
   }
 }
 
-typedef void _onPositionChanged(Position? position);
+/* typedef void _onPositionChanged(Position? position); */

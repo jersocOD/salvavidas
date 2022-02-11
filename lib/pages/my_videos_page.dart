@@ -1,19 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:report_child/classes/child_case.dart';
 import 'package:report_child/controllers/firestore_case.dart';
-import 'package:report_child/models/case_model.dart';
 import 'package:report_child/pages/view_sent_case_page.dart';
 import 'package:report_child/widgets/status_flag.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 class MyVideosPage extends StatefulWidget {
   @override

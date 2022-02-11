@@ -13,19 +13,33 @@ class RecordButton extends StatefulWidget {
 
 class _RecordButtonState extends State<RecordButton> {
   bool isRecording = false;
+  bool isPressing = false;
+
+  void changeState() {
+    if (!isRecording) {
+      widget.startRecording();
+    } else {
+      widget.stopRecording();
+    }
+    setState(() {
+      isRecording = !isRecording;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (!isRecording) {
-          widget.startRecording();
-        } else {
-          widget.stopRecording();
-        }
-        setState(() {
-          isRecording = !isRecording;
-        });
+        changeState();
+      },
+      onLongPressStart: (details) {
+        isPressing = true;
+        setState(() {});
+      },
+      onLongPressEnd: (details) {
+        isPressing = false;
+        setState(() {});
+        changeState();
       },
       child: Container(
         decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
@@ -33,20 +47,22 @@ class _RecordButtonState extends State<RecordButton> {
         width: 80,
         padding: EdgeInsets.all(5.0),
         margin: EdgeInsets.only(bottom: 10.0),
-        child: !isRecording ? _Record() : _Stop(),
+        child: !isRecording
+            ? _Record(opacity: isPressing ? 0.7 : 1.0)
+            : _Stop(opacity: isPressing ? 0.7 : 1.0),
       ),
     );
   }
 }
 
 class _Record extends StatelessWidget {
-  const _Record({Key? key}) : super(key: key);
-
+  const _Record({Key? key, this.opacity = 1.0}) : super(key: key);
+  final double opacity;
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.red,
+        color: Colors.red.withOpacity(opacity),
         shape: BoxShape.circle,
       ),
     );
@@ -54,14 +70,14 @@ class _Record extends StatelessWidget {
 }
 
 class _Stop extends StatelessWidget {
-  const _Stop({Key? key}) : super(key: key);
-
+  const _Stop({Key? key, this.opacity = 1.0}) : super(key: key);
+  final double opacity;
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
-        color: Colors.red,
+        color: Colors.red.withOpacity(opacity),
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(8.0),
       ),

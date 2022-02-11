@@ -1,11 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:provider/provider.dart';
-import 'package:report_child/models/case_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageDropDown extends StatefulWidget {
   final Function setState;

@@ -21,6 +21,6 @@ class PermissionsHandler {
         ];
 
   Future<void> askPermissions() async {
-    Map<Permission, PermissionStatus> statuses = await perms.request();
+    /* Map<Permission, PermissionStatus> statuses = */ await perms.request();
   }
 }

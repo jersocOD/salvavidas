@@ -1,9 +1,7 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:report_child/models/case_model.dart';
-import 'package:report_child/pages/form_send_page.dart';
 
 class BottomOpenFileButton extends StatefulWidget {
   const BottomOpenFileButton({Key? key, required this.goToForm})
