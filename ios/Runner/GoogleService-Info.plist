@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>975831608713-lr17b5robhpcstsq91ujrurkhf5hss72.apps.googleusercontent.com</string>
+	<string>975831608713-qo8ek54grgalvdutp6jcborb2jgtmv9q.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.975831608713-lr17b5robhpcstsq91ujrurkhf5hss72</string>
+	<string>com.googleusercontent.apps.975831608713-qo8ek54grgalvdutp6jcborb2jgtmv9q</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>975831608713-54k8ras9dp00koediu67r3imhvs0qugc.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.mundoultra.helpachild</string>
+	<string>com.mundoultra.salvavidas</string>
 	<key>PROJECT_ID</key>
 	<string>report-a-child</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:975831608713:ios:1bfb8ff8f1f1d405ae0558</string>
+	<string>1:975831608713:ios:b610765eb06dbb18ae0558</string>
 </dict>
 </plist>
