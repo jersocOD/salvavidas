@@ -60,5 +60,9 @@
   "LocationSettings": {
     "ActivateLocationMessage": "Para poder localizar al niño, se necesita acceso a su localización. Por favor, le pedimos que active la localización.",
     "ActivateLocationPermsMessage": "Para poder localizar al niño, se necesita acceso a su localización. Por favor, le pedimos que active los permisos."
+  },
+  "Mail": {
+    "Subject": "Alerta de {type}"
   }
+
 }

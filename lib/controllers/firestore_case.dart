@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -81,8 +82,8 @@ class CaseUploader {
         Uri.parse("https://salvavidas.mundoultra.com/send_mail.php"),
         body: {
           "secretKey": "MAMAMELODY2021",
-          "subject": "Alerta de ${cs.observacion}",
-          "message": messageFromCS(cs),
+          "subject": translate("Mail.Subject", args: {"type": cs.observacion}),
+          "messageHtml": await messageFromCS(cs),
           if (list["PRIMARY"].isNotEmpty)
             "addresses": jsonEncode(list["PRIMARY"]),
           if (list["CC"].isNotEmpty) "CCaddresses": jsonEncode(list["CC"]),
@@ -152,34 +153,18 @@ class CaseUploader {
   static Future<String> messageFromCS(CaseModel cs) async {
     var response = await http.get(
         Uri.parse("https://salvavidas.mundoultra.com/mail-templates/es.html"));
-    String mailData = response.body;
-/* 
-    mailData=mailData.replaceFirst(from, cs.observacion);
-    mailData=mailData.replaceFirst(from, cs.referencia);
-    mailData=mailData.replaceFirst(from, cs.comentarios);
-    mailData=mailData.replaceFirst(from, cs.position!.latitude);
-    mailData=mailData.replaceFirst(from, cs.position!.longitude);
-    mailData=mailData.replaceFirst(from, getAddressFromPlaceMark(cs.placemark)); */
+    String mailData = utf8.decode(response.bodyBytes);
 
-    return """Saludos<br>
-
-Se ha reportado un niño ${cs.observacion} a través de la aplicación Salvavidas.<br><br>
-
-Estos son los datos:<br><br>
-
-Observación: <strong>${cs.observacion}</strong><br>
-Referencia: ${cs.referencia}<br>
-Comentarios adicionales: ${cs.comentarios}<br><br>
-
-Estas son sus coordenadas: <br>
-Latitud: ${cs.position!.latitude}, Longitud: ${cs.position!.longitude}<br>
-Aquí está el mapa a su ubicación: <a href="https://www.google.com/maps/place/${cs.position!.latitude},${cs.position!.longitude}" target="_blank">Ir a Google Maps</a><br>
-Esta es su dirección: <strong>${getAddressFromPlaceMark(cs.placemark)}</strong><br><br>
-
-Se le ha adjuntado un <b>video donde se muestra al niño</b>.<br><br>
-
-Atentamente,<br>
-Equipo Salvavidas""";
+    mailData = mailData.replaceAll("{observacion}", cs.observacion);
+    mailData = mailData.replaceAll("{referencia}", cs.referencia);
+    mailData = mailData.replaceAll("{comentarios}", cs.comentarios);
+    mailData =
+        mailData.replaceAll("{latitude}", cs.position!.latitude.toString());
+    mailData =
+        mailData.replaceAll("{longitude}", cs.position!.longitude.toString());
+    mailData = mailData.replaceAll(
+        "{placemark}", getAddressFromPlaceMark(cs.placemark));
+    return mailData;
   }
 
   static String getAddressFromPlaceMark(String json) {

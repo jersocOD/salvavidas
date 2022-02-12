@@ -21,6 +21,7 @@ class GeolocalizationManager {
 /*   bool _streaming = false; */
 
   Future<bool> initGeolocator({bool alreadyCalled = false}) async {
+    if (_initialized) return true;
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -88,6 +89,7 @@ class GeolocalizationManager {
   }
 
   Future<bool> getCurrentLocation(BuildContext context) async {
+    await initGeolocator();
     try {
       Provider.of<CaseModel>(context, listen: false).position =
           await Geolocator.getCurrentPosition(

@@ -297,7 +297,7 @@ class _HomePageState extends State<HomePage>
         onPointerUp: (_) => _pointers--,
         child: CameraPreview(
           controller!,
-          child: LayoutBuilder(
+/*           child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
             return GestureDetector(
               behavior: HitTestBehavior.opaque,
@@ -305,12 +305,13 @@ class _HomePageState extends State<HomePage>
               onScaleUpdate: _handleScaleUpdate,
               onTapDown: (details) => onViewFinderTap(details, constraints),
             );
-          }),
+          }), */
         ),
       );
     }
   }
 
+/* 
   void _handleScaleStart(ScaleStartDetails details) {
     _baseScale = _currentScale;
   }
@@ -326,7 +327,7 @@ class _HomePageState extends State<HomePage>
 
     await controller!.setZoomLevel(_currentScale);
   }
-
+ */
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   void showInSnackBar(String message) {

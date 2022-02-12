@@ -61,5 +61,8 @@
   "LocationSettings": {
     "ActivateLocationMessage": "In order to locate the child, access to their location is needed. Please activate location.",
     "ActivateLocationPermsMessage": "In order to locate the child, access to her their is needed. Please activate permissions."
+  },
+  "Mail": {
+    "Subject": "{type} Alert"
   }
 }
