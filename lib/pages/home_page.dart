@@ -36,9 +36,9 @@ class HomePage extends StatefulWidget {
 
 void logError(String code, String? message) {
   if (message != null) {
-    print('Error: $code\nError Message: $message');
+    debugPrint('Error: $code\nError Message: $message');
   } else {
-    print('Error: $code');
+    debugPrint('Error: $code');
   }
 }
 
@@ -191,7 +191,8 @@ class _HomePageState extends State<HomePage>
                     child: Center(
                       child: Text(
                         "Lat: ${pos!.latitude}, Long: ${pos.longitude}",
-                        style: TextStyle(color: Colors.white60, fontSize: 12),
+                        style: const TextStyle(
+                            color: Colors.white60, fontSize: 12),
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -202,7 +203,7 @@ class _HomePageState extends State<HomePage>
                     bottom: 0,
                     child: VideoTimer(
                       timerController: timerController,
-                      duration: Duration(seconds: 30),
+                      duration: const Duration(seconds: 30),
                     ),
                   ),
                 ],
@@ -218,12 +219,12 @@ class _HomePageState extends State<HomePage>
               children: [
                 Container(
                   height: 95,
-                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   width: double.infinity,
                   child: Center(
                     child: Text(
                       translate('HomePage.OrientationMessage'),
-                      style: TextStyle(color: Colors.white, fontSize: 14),
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -413,7 +414,7 @@ class _HomePageState extends State<HomePage>
     timerController.start();
     if (mounted) setState(() {});
 
-    await Future.delayed(Duration(seconds: 30));
+    await Future.delayed(const Duration(seconds: 30));
     timerController.stop();
     onStopButtonPressed();
   }

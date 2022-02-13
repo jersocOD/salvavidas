@@ -6,6 +6,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:report_child/classes/child_case.dart';
 import 'package:report_child/controllers/firestore_case.dart';
+import 'package:report_child/controllers/observaciones_types.dart';
 import 'package:report_child/pages/view_sent_case_page.dart';
 import 'package:report_child/widgets/status_flag.dart';
 
@@ -16,6 +17,7 @@ class MyVideosPage extends StatefulWidget {
 
 class _MyVideosPageState extends State<MyVideosPage> {
   List<QueryDocumentSnapshot<ChildCase>> childCases = [];
+  Observaciones obs = Observaciones();
   @override
   void initState() {
     super.initState();
@@ -33,7 +35,7 @@ class _MyVideosPageState extends State<MyVideosPage> {
     // monitor network fetch
     childCases = await CaseUploader().getCases(context);
     setState(() {});
-    print("Refreshing.....");
+    debugPrint("Refreshing.....");
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
@@ -41,7 +43,7 @@ class _MyVideosPageState extends State<MyVideosPage> {
   void _onLoading() async {
     // monitor network fetch
     childCases = await CaseUploader().getCases(context);
-    print("Loading.....");
+    debugPrint("Loading.....");
     // if failed,use loadFailed(),if no data return,use LoadNodata()
 
     if (mounted) setState(() {});
@@ -50,6 +52,7 @@ class _MyVideosPageState extends State<MyVideosPage> {
 
   @override
   Widget build(BuildContext context) {
+    obs.getMapIntl();
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: false,
@@ -59,7 +62,7 @@ class _MyVideosPageState extends State<MyVideosPage> {
               refreshingText: translate('MyVideosPage.Loading.Loading'),
               completeText: translate('MyVideosPage.Loading.Updated'),
             )
-          : MaterialClassicHeader(
+          : const MaterialClassicHeader(
               offset: -20,
             ),
       controller: _refreshController,
@@ -102,9 +105,9 @@ class _MyVideosPageState extends State<MyVideosPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(10.0),
-                      topRight: const Radius.circular(10.0),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
                     ),
                     child: Container(
                         width: double.infinity,
@@ -119,26 +122,27 @@ class _MyVideosPageState extends State<MyVideosPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
                           locationRef,
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          childCase.data().observacion,
-                          style: TextStyle(
+                          obs.observacionesIntl[Observaciones.observaciones
+                              .indexOf(childCase.data().observacion)],
+                          style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 15),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                       ],
@@ -149,8 +153,8 @@ class _MyVideosPageState extends State<MyVideosPage> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
-                  padding:
-                      EdgeInsets.only(top: 15.0, bottom: 45.0, right: 15.0),
+                  padding: const EdgeInsets.only(
+                      top: 15.0, bottom: 45.0, right: 15.0),
                   child: StatusFlag(status: childCase.data().status),
                 ),
               )
@@ -175,20 +179,20 @@ class ThumbnailAsyncImage extends StatelessWidget {
       height: 150,
       loadingBuilder: (context, child, loadingProgress) {
         if (loadingProgress == null) return child;
-        return Padding(
-          padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, right: 150.0),
+        return const Padding(
+          padding: EdgeInsets.only(top: 15.0, bottom: 15.0, right: 150.0),
           child: Center(
             child: CircularProgressIndicator(
-              color: Color(0xFF6C63FF),
+              color: const Color(0xFF6C63FF),
             ),
           ),
         );
       },
       errorBuilder: (_, __, ___) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, right: 150.0),
-          child: Center(
-            child: CircularProgressIndicator(
+        return const Padding(
+          padding: EdgeInsets.only(top: 15.0, bottom: 15.0, right: 150.0),
+          child: const Center(
+            child: const CircularProgressIndicator(
               color: Color(0xFF6C63FF),
             ),
           ),

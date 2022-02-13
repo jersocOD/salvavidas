@@ -1,4 +1,4 @@
-package com.mundoultra.helpachild
+package com.mundoultra.salvavidas
 
 import io.flutter.embedding.android.FlutterActivity
 

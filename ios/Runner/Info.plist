@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Salvavidas</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -18,10 +20,53 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb282449297136190</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FacebookAppID</key>
+	<string>282449297136190</string>
+	<key>FacebookClientToken</key>
+	<string>147a14e0a9e2e9d578d9c293e6fc67a0</string>
+	<key>FacebookDisplayName</key>
+	<string>Salvavidas</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fbapi20130214</string>
+		<string>fbapi20130410</string>
+		<string>fbapi20130702</string>
+		<string>fbapi20131010</string>
+		<string>fbapi20131219</string>
+		<string>fbapi20140410</string>
+		<string>fbapi20140116</string>
+		<string>fbapi20150313</string>
+		<string>fbapi20150629</string>
+		<string>fbapi20160328</string>
+		<string>fbauth</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Para grabar el video del niño</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Para guardar la localización del niño</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Para guardar la localización del niño</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Para grabar el audio del video del niño</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Para grabar un video del niño</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,63 +86,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSCameraUsageDescription</key>
-	<string>Para grabar el video del niño</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Para grabar el audio del video del niño</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Para grabar un video del niño</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Para guardar la localización del niño</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Para guardar la localización del niño</string>
-
-	<key>CFBundleURLTypes</key>
-<array>
-    <em><!--
-    <dict>
-    ... Some other CFBundleURLTypes definition.
-    </dict>
-    --></em>
-    <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
-            <em><!--
-              Replace "000000000000" with your Facebook App ID here.
-              **NOTE**: The scheme needs to start with `fb` and then your ID.
-            --></em>
-            <string>fb282449297136190</string>
-        </array>
-    </dict>
-</array>
- 
-<key>FacebookAppID</key>
- 
-<em><!-- Replace "000000000000" with your Facebook App ID here. --></em>
-<string>282449297136190</string>
-<key>FacebookDisplayName</key>
- 
-<em><!-- Replace "YOUR_APP_NAME" with your Facebook App name. --></em>
-<string>Help a Child</string>
-<key>LSApplicationQueriesSchemes</key>
-<array>
-  <string>fbapi</string>
-  <string>fbapi20130214</string>
-  <string>fbapi20130410</string>
-  <string>fbapi20130702</string>
-  <string>fbapi20131010</string>
-  <string>fbapi20131219</string>
-  <string>fbapi20140410</string>
-  <string>fbapi20140116</string>
-  <string>fbapi20150313</string>
-  <string>fbapi20150629</string>
-  <string>fbapi20160328</string>
-  <string>fbauth</string>
-  <string>fb-messenger-share-api</string>
-  <string>fbauth2</string>
-  <string>fbshareextension</string>
-</array>
-<key>FacebookClientToken</key>
-<string>147a14e0a9e2e9d578d9c293e6fc67a0</string>
 </dict>
 </plist>

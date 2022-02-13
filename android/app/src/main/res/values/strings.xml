@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Help a Child</string>
+    <string name="app_name">Salvavidas</string>
  
     <!-- Replace "000000000000" with your Facebook App ID here. -->
     <string name="facebook_app_id">282449297136190</string>

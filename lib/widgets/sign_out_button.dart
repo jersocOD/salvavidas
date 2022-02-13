@@ -13,7 +13,7 @@ class _SignOutButtonState extends State<SignOutButton> {
   @override
   Widget build(BuildContext context) {
     return _isSigningOut
-        ? CircularProgressIndicator(
+        ? const CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           )
         : ElevatedButton(
@@ -38,10 +38,10 @@ class _SignOutButtonState extends State<SignOutButton> {
               Navigator.of(context).pushReplacement(_routeToSignInScreen());
             },
             child: Padding(
-              padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
               child: Text(
                 translate('AccountPage.SignOut'),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -56,7 +56,7 @@ class _SignOutButtonState extends State<SignOutButton> {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => SignInScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(-1.0, 0.0);
+        var begin = const Offset(-1.0, 0.0);
         var end = Offset.zero;
         var curve = Curves.ease;
 

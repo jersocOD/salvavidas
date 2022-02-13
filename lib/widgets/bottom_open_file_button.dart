@@ -25,9 +25,9 @@ class _BottomOpenFileButtonState extends State<BottomOpenFileButton> {
         Provider.of<CaseModel>(context, listen: false).videoPath = image.path;
         widget.goToForm();
       },
-      child: Padding(
-        padding: const EdgeInsets.only(left: 50.0, bottom: 40.0),
-        child: Icon(Icons.image, size: 30, color: Colors.white),
+      child: const Padding(
+        padding: EdgeInsets.only(left: 50.0, bottom: 40.0),
+        child: const Icon(Icons.image, size: 30, color: Colors.white),
       ),
     );
   }

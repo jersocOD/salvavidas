@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
+import 'package:report_child/controllers/config_manager.dart';
 import 'package:report_child/controllers/permissions_handler.dart';
 import 'package:report_child/models/account_model.dart';
 import 'package:report_child/pages/account_page.dart';
@@ -10,6 +11,7 @@ import 'package:report_child/pages/sign_in_page.dart';
 import '../pages/home_page.dart';
 import '../styles/text_styles.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 final GlobalKey<ScaffoldState> navBarControllerKey = GlobalKey<ScaffoldState>();
 
@@ -30,16 +32,16 @@ class _BottomNavControllerState extends State<BottomNavController> {
 
   List<BottomNavigationBarItem> _navigationItems = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
-        icon: Icon(Icons.videocam),
+        icon: const Icon(Icons.videocam),
         label: translate('Pages.Record'),
         tooltip: "Salvavidas"),
     BottomNavigationBarItem(
-      icon: FaIcon(FontAwesomeIcons.child),
+      icon: const FaIcon(FontAwesomeIcons.child),
       label: translate('Pages.MyVideos'),
       tooltip: translate('Pages.MyVideos'),
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.person),
+      icon: const Icon(Icons.person),
       label: translate('Pages.Account'),
       tooltip: translate('Pages.Account'),
     ),
@@ -70,7 +72,7 @@ class _BottomNavControllerState extends State<BottomNavController> {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => SignInScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(-1.0, 0.0);
+        var begin = const Offset(-1.0, 0.0);
         var end = Offset.zero;
         var curve = Curves.ease;
 
@@ -101,7 +103,7 @@ class _BottomNavControllerState extends State<BottomNavController> {
             _pages = <Widget>[
               HomePage(),
               MyVideosPage(),
-              AccountPage(),
+              const AccountPage(),
             ];
             setState(() {});
           }
@@ -110,9 +112,26 @@ class _BottomNavControllerState extends State<BottomNavController> {
         _pages = <Widget>[
           HomePage(),
           MyVideosPage(),
-          AccountPage(),
+          const AccountPage(),
         ];
         setState(() {});
+      }
+
+      var localizationDelegate = LocalizedApp.of(context).delegate;
+      await configManager
+          .getConfig(localizationDelegate.currentLocale.languageCode);
+
+      if (configManager.beta) {
+        if (await configManager.canShowNotification()) {
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.INFO,
+            animType: AnimType.BOTTOMSLIDE,
+            title: translate('Notification'),
+            desc: configManager.betaMessage,
+            btnOkOnPress: () {},
+          )..show();
+        }
       }
     });
   }
@@ -121,16 +140,16 @@ class _BottomNavControllerState extends State<BottomNavController> {
   Widget build(BuildContext context) {
     _navigationItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-          icon: Icon(Icons.videocam),
+          icon: const Icon(Icons.videocam),
           label: translate('Pages.Record'),
           tooltip: "Salvavidas"),
       BottomNavigationBarItem(
-        icon: FaIcon(FontAwesomeIcons.child),
+        icon: const FaIcon(FontAwesomeIcons.child),
         label: translate('Pages.MyVideos'),
         tooltip: translate('Pages.MyVideos'),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.person),
+        icon: const Icon(Icons.person),
         label: translate('Pages.Account'),
         tooltip: translate('Pages.Account'),
       ),
@@ -144,7 +163,7 @@ class _BottomNavControllerState extends State<BottomNavController> {
           style: Styles.appBarTitleStyle,
           textAlign: TextAlign.center,
         ),
-        backgroundColor: Color(0xFF6C63FF),
+        backgroundColor: const Color(0xFF6C63FF),
         toolbarHeight: 45,
         elevation: 0,
       ),
@@ -155,16 +174,17 @@ class _BottomNavControllerState extends State<BottomNavController> {
       bottomNavigationBar: BottomNavigationBar(
         items: _navigationItems,
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFF6C63FF),
+        selectedItemColor: const Color(0xFF6C63FF),
         onTap: _onItemTapped,
         backgroundColor: Colors.white,
         elevation: 8,
         iconSize: 20,
         selectedFontSize: 14,
         unselectedFontSize: 14,
-        selectedIconTheme: IconThemeData(color: Color(0xFF6C63FF), size: 25),
-        selectedLabelStyle: TextStyle(
-          color: Color(0xFF6C63FF),
+        selectedIconTheme:
+            const IconThemeData(color: Color(0xFF6C63FF), size: 25),
+        selectedLabelStyle: const TextStyle(
+          color: const Color(0xFF6C63FF),
         ),
       ),
       // This trailing comma makes auto-formatting nicer for build methods.

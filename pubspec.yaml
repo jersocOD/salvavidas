@@ -51,11 +51,13 @@ dependencies:
   pull_to_refresh: ^2.0.0
   flutter_translate: ^3.0.1
   simple_timer: ^2.0.0
+  awesome_dialog: ^2.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_translate_gen: ^2.1.0
   build_runner: ^2.1.7
+  change_app_package_name: ^1.0.0
 dependency_overrides:
 
 # For information on the generic Dart part of this file, see the

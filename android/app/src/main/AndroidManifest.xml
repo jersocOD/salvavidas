@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mundoultra.helpachild">
+    package="com.mundoultra.salvavidas">
    <application
-        android:label="Help a Child"
+        android:label="Salvavidas"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

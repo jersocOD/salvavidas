@@ -31,6 +31,8 @@
 .pub/
 /build/
 
+#release related
+/outputs/
 # Web related
 lib/generated_plugin_registrant.dart
 

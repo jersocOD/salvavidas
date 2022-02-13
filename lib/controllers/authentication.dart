@@ -12,7 +12,7 @@ class Authentication {
       backgroundColor: Colors.black,
       content: Text(
         content,
-        style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+        style: const TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
       ),
     );
   }
@@ -48,7 +48,7 @@ class Authentication {
 
         user = userCredential.user;
       } catch (e) {
-        print(e);
+        debugPrint(e.toString());
       }
     } else {
       final GoogleSignIn googleSignIn = GoogleSignIn();

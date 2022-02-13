@@ -22,8 +22,8 @@ class _FacebookSignInButtonState extends State<FacebookSignInButton> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: _isSigningIn
-          ? CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ? const CircularProgressIndicator(
+              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
             )
           : OutlinedButton(
               style: ButtonStyle(
@@ -61,7 +61,7 @@ class _FacebookSignInButtonState extends State<FacebookSignInButton> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Icon(
+                    const Icon(
                       FontAwesomeIcons.facebookF,
                       color: Colors.white,
                     ),

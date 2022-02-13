@@ -61,7 +61,7 @@ class _FormSendPageState extends State<FormSendPage> {
         automaticallyImplyLeading: true,
         title: Text(translate('FormPage.LastStep'),
             style: Styles.appBarTitleStyle),
-        backgroundColor: Color(0xFF6C63FF),
+        backgroundColor: const Color(0xFF6C63FF),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -69,7 +69,7 @@ class _FormSendPageState extends State<FormSendPage> {
           mainAxisSize: MainAxisSize.max,
           children: [
             VideoPreview(),
-            SizedBox(
+            const SizedBox(
               height: 30,
               width: double.infinity,
             ),
@@ -112,26 +112,26 @@ class _Form extends StatelessWidget {
       borderRadius: BorderRadius.circular(3.0),
       elevation: 4,
       child: Container(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3.0),
         ),
         child: Column(
           children: [
             _ObservacionDropDown(),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _CustomTextField(
               tec: tecReferencia,
               title: translate('ChildCase.Reference'),
               placeholder: translate('FormPage.ReferencePlaceholder'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _CustomTextField(
               tec: tecComentarios,
               title: translate('ChildCase.Comments'),
               placeholder: translate('FormPage.CommentsPlaceholder'),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
               width: double.infinity,
             ),
@@ -162,7 +162,7 @@ class _CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(title),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
         Expanded(
@@ -174,7 +174,7 @@ class _CustomTextField extends StatelessWidget {
                   minLines: 1,
                   //maxLength: 50,
                   controller: tec,
-                  style: TextStyle(color: Colors.black, fontSize: 15),
+                  style: const TextStyle(color: Colors.black, fontSize: 15),
                 )
               : CupertinoTextField(
                   decoration: _kDefaultRoundedBorderDecoration,
@@ -184,7 +184,7 @@ class _CustomTextField extends StatelessWidget {
                   minLines: 1,
                   //   maxLength: 50,
                   controller: tec,
-                  style: TextStyle(color: Colors.black, fontSize: 15),
+                  style: const TextStyle(color: Colors.black, fontSize: 15),
                 ),
         ),
       ],
@@ -204,8 +204,8 @@ class __SendButtonState extends State<_SendButton> {
   @override
   Widget build(BuildContext context) {
     return proccessing
-        ? Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
+        ? const Padding(
+            padding: EdgeInsets.symmetric(vertical: 15),
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFFDF6B)),
             ),
@@ -213,7 +213,7 @@ class __SendButtonState extends State<_SendButton> {
         : ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(
-                Color(0xFFFFDF6B),
+                const Color(0xFFFFDF6B),
               ),
               shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
@@ -232,10 +232,10 @@ class __SendButtonState extends State<_SendButton> {
               Navigator.of(context).pop();
             },
             child: Padding(
-              padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
               child: Text(
                 translate('FormPage.SendVideoButton'),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -268,7 +268,7 @@ class _ObservacionDropDownState extends State<_ObservacionDropDown> {
             padding: const EdgeInsets.only(right: 20.0),
             child: Text(
               obs.observacionesIntl[selectedIndex],
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
             ),
           )
         : _pickerButton(
@@ -286,7 +286,7 @@ class _ObservacionDropDownState extends State<_ObservacionDropDown> {
       mainAxisSize: MainAxisSize.max,
       children: [
         Text(translate('ChildCase.Type')),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
         Expanded(
@@ -328,7 +328,7 @@ class _ObservacionDropDownState extends State<_ObservacionDropDown> {
   Widget _pickerButton(
       String defaultValue, List<String> values, Function onChanged) {
     return ConstrainedBox(
-      constraints: BoxConstraints.loose(Size(80, 100)),
+      constraints: BoxConstraints.loose(const Size(80, 100)),
       child: DropdownButton<String>(
         isExpanded: true,
         value: defaultValue,

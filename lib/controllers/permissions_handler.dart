@@ -10,6 +10,8 @@ class PermissionsHandler {
           Permission.camera,
           Permission.phone,
           Permission.microphone,
+          Permission.location,
+          Permission.locationWhenInUse,
         ]
       : [
           Permission.photos,
@@ -18,6 +20,8 @@ class PermissionsHandler {
           Permission.mediaLibrary,
           Permission.photos,
           Permission.microphone,
+          Permission.location,
+          Permission.locationWhenInUse,
         ];
 
   Future<void> askPermissions() async {

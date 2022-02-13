@@ -11,6 +11,8 @@ import 'package:report_child/models/account_model.dart';
 import 'package:report_child/models/case_model.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
+import 'config_manager.dart';
+
 class CaseUploader {
   var videos = FirebaseFirestore.instance
       .collection('videos')
@@ -60,11 +62,14 @@ class CaseUploader {
       'videoThumbnailUrl':
           "https://salvavidas.mundoultra.com/thumbnails/${response.id}.jpg"
     });
-    sendMail(
-        ["https://salvavidas.mundoultra.com/videos/${response.id}.mp4"], cs);
+    await sendMail(
+        ["https://salvavidas.mundoultra.com/videos/${response.id}.mp4"],
+        cs,
+        context);
   }
 
-  static Future<void> sendMail(List<String> attachments, CaseModel cs) async {
+  static Future<void> sendMail(
+      List<String> attachments, CaseModel cs, BuildContext context) async {
 /*     List<Map<String, String>> addresses = [
       /*  {"name": "Jer1", "email": "jeremyultra@gmail.com"}, */
     ];
@@ -82,16 +87,18 @@ class CaseUploader {
         Uri.parse("https://salvavidas.mundoultra.com/send_mail.php"),
         body: {
           "secretKey": "MAMAMELODY2021",
-          "subject": translate("Mail.Subject", args: {"type": cs.observacion}),
-          "messageHtml": await messageFromCS(cs),
+          "subject": (configManager.mailAlwaysInSpanish)
+              ? "Reporte de Niño ${cs.observacion}"
+              : translate("Mail.Subject", args: {"type": cs.observacion}),
+          "messageHtml": await messageFromCS(cs, context),
           if (list["PRIMARY"].isNotEmpty)
             "addresses": jsonEncode(list["PRIMARY"]),
           if (list["CC"].isNotEmpty) "CCaddresses": jsonEncode(list["CC"]),
           if (list["BCC"].isNotEmpty) "CCOaddresses": jsonEncode(list["BCC"]),
           "attachments": jsonEncode(attachments),
         });
-    print("Status Code:" + response.statusCode.toString());
-    print("Body:" + response.body);
+    debugPrint("Status Code:" + response.statusCode.toString());
+    debugPrint("Body:" + response.body);
   }
 
   static Future<void> _uploadVideo(
@@ -119,8 +126,8 @@ class CaseUploader {
           "id": id,
         });
 
-    print("Status Code:" + response.statusCode.toString());
-    print("Body:" + response.body);
+    debugPrint("Status Code:" + response.statusCode.toString());
+    debugPrint("Body:" + response.body);
   }
 
   Future<List<QueryDocumentSnapshot<ChildCase>>> getCases(
@@ -150,9 +157,14 @@ class CaseUploader {
     ]; */
   }
 
-  static Future<String> messageFromCS(CaseModel cs) async {
-    var response = await http.get(
-        Uri.parse("https://salvavidas.mundoultra.com/mail-templates/es.html"));
+  static Future<String> messageFromCS(
+      CaseModel cs, BuildContext context) async {
+    var localizationDelegate = LocalizedApp.of(context).delegate;
+    String lang = configManager.mailAlwaysInSpanish
+        ? "es"
+        : localizationDelegate.currentLocale.languageCode;
+    var response = await http.get(Uri.parse(
+        "https://salvavidas.mundoultra.com/mail-templates/$lang.html"));
     String mailData = utf8.decode(response.bodyBytes);
 
     mailData = mailData.replaceAll("{observacion}", cs.observacion);
@@ -173,17 +185,21 @@ class CaseUploader {
 
     String address = "";
     if (placemark["street"] != "") address += placemark["street"] + _coma();
-    if (placemark["subLocality"] != "")
+    if (placemark["subLocality"] != "") {
       address += placemark["subLocality"] + _coma();
+    }
     if (placemark["locality"] != "" &&
-        placemark["locality"] != placemark["name"])
+        placemark["locality"] != placemark["name"]) {
       address += placemark["locality"] + _coma();
+    }
     if (placemark["name"] != "") address += placemark["name"] + _coma();
-    if (placemark["subAdministrativeArea"] != "")
+    if (placemark["subAdministrativeArea"] != "") {
       address += placemark["subAdministrativeArea"] + _coma();
+    }
     if (placemark["administrativeArea"] != "" &&
-        placemark["administrativeArea"] != placemark["subAdministrativeArea"])
+        placemark["administrativeArea"] != placemark["subAdministrativeArea"]) {
       address += placemark["administrativeArea"] + _coma();
+    }
     if (placemark["country"] != "") address += placemark["country"] + _coma();
     if (placemark["postalCode"] != "") address += placemark["postalCode"];
 

@@ -7,6 +7,8 @@ part of 'translate.dart';
 // **************************************************************************
 
 class Keys {
+  static const String Notification = 'Notification';
+
   static const String Button_Cancel = 'button.cancel';
 
   static const String Button_Change_Language = 'button.change_language';
@@ -57,6 +59,8 @@ class Keys {
 
   static const String Formpage_Laststep = 'FormPage.LastStep';
 
+  static const String Report = 'Report';
+
   static const String Childcase_Status_Inprogress =
       'ChildCase.Status.InProgress';
 
@@ -70,9 +74,23 @@ class Keys {
 
   static const String Childcase_Comments = 'ChildCase.Comments';
 
+  static const String Childcase_Types_Orphanedbycovid =
+      'ChildCase.Types.OrphanedByCovid';
+
+  static const String Childcase_Types_Abandoned = 'ChildCase.Types.Abandoned';
+
+  static const String Childcase_Types_Lost = 'ChildCase.Types.Lost';
+
+  static const String Childcase_Types_Endangered_Vulnerable =
+      'ChildCase.Types.Endangered/Vulnerable';
+
+  static const String Childcase_Types_Orphan = 'ChildCase.Types.Orphan';
+
   static const String Locationsettings_Activatelocationmessage =
       'LocationSettings.ActivateLocationMessage';
 
   static const String Locationsettings_Activatelocationpermsmessage =
       'LocationSettings.ActivateLocationPermsMessage';
+
+  static const String Mail_Subject = 'Mail.Subject';
 }

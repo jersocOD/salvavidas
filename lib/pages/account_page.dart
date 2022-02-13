@@ -78,7 +78,7 @@ class _AccountPageState extends State<AccountPage> {
                   ), */
               /* ],
               ), */
-              SizedBox(height: 8.0),
+              /* SizedBox(height: 8.0),
               Text(
                 '(${_user.email!})',
                 style: TextStyle(
@@ -86,7 +86,7 @@ class _AccountPageState extends State<AccountPage> {
                   fontSize: 20,
                   letterSpacing: 0.5,
                 ),
-              ),
+              ), */
               SizedBox(height: 24.0),
               LanguageDropDown(setState: () {
                 setState(() {});

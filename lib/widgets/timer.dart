@@ -21,7 +21,7 @@ class _VideoTimerState extends State<VideoTimer> {
       duration: widget.duration,
       progressTextCountDirection: TimerProgressTextCountDirection.count_up,
       displayProgressIndicator: false,
-      progressTextStyle: TextStyle(
+      progressTextStyle: const TextStyle(
         color: Colors.green,
         fontWeight: FontWeight.bold,
         fontSize: 30,

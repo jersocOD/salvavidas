@@ -15,7 +15,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF6C63FF),
+      backgroundColor: const Color(0xFF6C63FF),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
@@ -38,13 +38,13 @@ class _SignInScreenState extends State<SignInScreen> {
                 future: Authentication.initializeFirebase(context: context),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
-                    return Text('Error initializing Firebase');
+                    return const Text('Error initializing Firebase');
                   } else if (snapshot.connectionState == ConnectionState.done) {
                     return Column(
                       children: [GoogleSignInButton(), FacebookSignInButton()],
                     );
                   }
-                  return CircularProgressIndicator(
+                  return const CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
                       CustomColors.firebaseOrange,
                     ),

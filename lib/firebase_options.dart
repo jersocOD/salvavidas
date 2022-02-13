@@ -42,7 +42,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDuiMW_zNgoURe1sQqIxNvxPEfzAubfgSU',
-    appId: '1:975831608713:android:730595e6688ec3d7ae0558',
+    appId: '1:975831608713:android:e0aadb2cb372efa4ae0558',
     messagingSenderId: '975831608713',
     projectId: 'report-a-child',
     storageBucket: 'report-a-child.appspot.com',
@@ -50,12 +50,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBWwEAQVyC96DFxGYeR1Y35WYRgv-5zVp8',
-    appId: '1:975831608713:ios:1bfb8ff8f1f1d405ae0558',
+    appId: '1:975831608713:ios:b610765eb06dbb18ae0558',
     messagingSenderId: '975831608713',
     projectId: 'report-a-child',
     storageBucket: 'report-a-child.appspot.com',
     androidClientId: '975831608713-54k8ras9dp00koediu67r3imhvs0qugc.apps.googleusercontent.com',
-    iosClientId: '975831608713-lr17b5robhpcstsq91ujrurkhf5hss72.apps.googleusercontent.com',
-    iosBundleId: 'com.mundoultra.helpachild',
+    iosClientId: '975831608713-qo8ek54grgalvdutp6jcborb2jgtmv9q.apps.googleusercontent.com',
+    iosBundleId: 'com.mundoultra.salvavidas',
   );
 }

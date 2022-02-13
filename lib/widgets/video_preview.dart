@@ -35,9 +35,9 @@ class VideoPreviewState extends State<VideoPreview> {
         Provider.of<CaseModel>(context, listen: false).videoThumbnailBytes; */
 
     return videoController == null
-        ? Padding(
-            padding: const EdgeInsets.only(top: 60),
-            child: CircularProgressIndicator(
+        ? const Padding(
+            padding: EdgeInsets.only(top: 60),
+            child: const CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
                 CustomColors.firebaseOrange,
               ),
@@ -72,7 +72,7 @@ class VideoPreviewState extends State<VideoPreview> {
                             VideoPlayer(videoController!),
                             Center(
                                 child: !isPlaying
-                                    ? Icon(
+                                    ? const Icon(
                                         Icons.play_arrow,
                                         color: Colors.white,
                                         size: 60,
@@ -85,7 +85,7 @@ class VideoPreviewState extends State<VideoPreview> {
                           ],
                         ),
                       )),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       /* border: Border.all(color: Colors.pink) */),
                   height: MediaQuery.of(context).size.width * 0.6,
                 ),
