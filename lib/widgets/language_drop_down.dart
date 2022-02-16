@@ -46,47 +46,50 @@ class _LanguageDropDownState extends State<LanguageDropDown> {
             changeLocale(context, langs[languages.indexOf(value)]);
             widget.setState();
           });
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Text(translate('Language.label')),
-        SizedBox(
-          width: 15,
+    return InkWell(
+      onTap: Platform.isIOS
+          ? () async {
+              await _showPicker(selectedIndex, languages, (value) {
+                setState(() {
+                  selectedIndex = value;
+                });
+                changeLocale(context, langs[value]);
+                widget.setState();
+              });
+            }
+          : null,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(translate('Language.label')),
+            const SizedBox(
+              width: 15,
+            ),
+            Expanded(
+              child: Platform.isIOS
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        trailing,
+                        Icon(CupertinoIcons.right_chevron,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.black
+                                    : Colors.white70,
+                            size: 30),
+                      ],
+                    )
+                  : trailing,
+            ),
+          ],
         ),
-        Expanded(
-          child: GestureDetector(
-            onTap: Platform.isIOS
-                ? () async {
-                    await _showPicker(selectedIndex, languages, (value) {
-                      setState(() {
-                        selectedIndex = value;
-                      });
-                      changeLocale(context, langs[value]);
-                      widget.setState();
-                    });
-                  }
-                : null,
-            child: Platform.isIOS
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      trailing,
-                      Icon(CupertinoIcons.right_chevron,
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? Colors.black
-                                  : Colors.white70,
-                          size: 30),
-                    ],
-                  )
-                : trailing,
-          ),
-        ),
-      ],
+      ),
     );
   }
 

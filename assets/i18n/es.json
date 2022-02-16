@@ -18,7 +18,8 @@
   },
   "SignInPage": {
     "SignInWithGoogle": "Iniciar sesión con Google",
-    "SignInWithFacebook": "Iniciar sesión con Facebook"
+    "SignInWithFacebook": "Iniciar sesión con Facebook",
+    "Continue": "Continuar"
   },
   "MyVideosPage": {
     "Loading": {
@@ -32,8 +33,10 @@
   },
   "AccountPage": {
     "Hello": "Hola {name}!",
-    "SignOutPrompt": "Ha iniciado sesión con su cuenta de Google. Para cerrar sesión en su cuenta, haga clic en el botón \"Cerrar sesión\".",
-    "SignOut": "Cerrar Sesión"
+    "SignOutPrompt": "Ha iniciado sesión. Para cerrar sesión en su cuenta, haga clic en el botón \"Cerrar sesión\".",
+    "SignOut": "Cerrar Sesión",
+    "ContactSupport":"Contactar Soporte",
+    "PrivacyPolicy":"Política de Privacidad"
   },
   "FormPage": {
     "ReferencePlaceholder": "Calle, Urbanización, Distrito, Lugar cercano.",

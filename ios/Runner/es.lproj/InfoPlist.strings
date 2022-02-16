@@ -1,0 +1,14 @@
+/*
+  InfoPlist.strings
+  Runner
+
+  Created by Socrates Osorio on 16/02/21.
+  Copyright © 2021 The Chromium Authors. All rights reserved.
+*/
+
+NSCameraUsageDescription = "Salvavidas necesita acceso a la cámara para que puedas grabar un video del niño.";
+NSLocationAlwaysUsageDescription="Salvavidas necesita acceso a la ubicación para poder localizar al niño.";
+NSLocationWhenInUseUsageDescription="Salvavidas necesita acceso a la ubicación para poder localizar al niño.";
+
+NSMicrophoneUsageDescription = "Salvavidas necesita acceso al micrófono para que la grabación del video funcione correctamente.";
+NSPhotoLibraryUsageDescription = "Salvavidas necesita acceso a la galería para que puedas elegir un video en lugar de grabarlo en el momento.";

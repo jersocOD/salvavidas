@@ -31,6 +31,8 @@ class Keys {
   static const String Signinpage_Signinwithfacebook =
       'SignInPage.SignInWithFacebook';
 
+  static const String Signinpage_Continue = 'SignInPage.Continue';
+
   static const String Myvideospage_Loading_Refresh =
       'MyVideosPage.Loading.Refresh';
 

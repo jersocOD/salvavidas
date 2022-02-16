@@ -33,6 +33,7 @@
 
 #release related
 /outputs/
+/commands/
 # Web related
 lib/generated_plugin_registrant.dart
 

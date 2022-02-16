@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:report_child/controllers/config_manager.dart';
 import 'package:report_child/models/case_model.dart';
 import 'package:report_child/styles/colors.dart';
 import 'package:video_player/video_player.dart';
@@ -34,10 +35,10 @@ class VideoPreviewState extends State<VideoPreview> {
     /*  var videoThumbnailBytes =
         Provider.of<CaseModel>(context, listen: false).videoThumbnailBytes; */
 
-    return videoController == null
+    return videoController == null && !configManager.demoMode
         ? const Padding(
             padding: EdgeInsets.only(top: 60),
-            child: const CircularProgressIndicator(
+            child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
                 CustomColors.firebaseOrange,
               ),
@@ -52,9 +53,11 @@ class VideoPreviewState extends State<VideoPreview> {
                 borderRadius: BorderRadius.circular(3.0),
                 child: Container(
                   child: AspectRatio(
-                      aspectRatio: videoController!.value.size != null
-                          ? videoController!.value.aspectRatio
-                          : 1.0,
+                      aspectRatio: configManager.demoMode
+                          ? 0.8
+                          : videoController!.value.size != null
+                              ? videoController!.value.aspectRatio
+                              : 1.0,
                       child: GestureDetector(
                         onTap: () {
                           if (!isPlaying) {
@@ -68,8 +71,16 @@ class VideoPreviewState extends State<VideoPreview> {
                           });
                         },
                         child: Stack(
+                          alignment: AlignmentDirectional.center,
+                          fit: StackFit.expand,
                           children: [
-                            VideoPlayer(videoController!),
+                            configManager.demoMode
+                                ? Image.network(
+                                    "https://salvavidas.mundoultra.com/cdn/image1-cropped.jpg",
+                                    fit: BoxFit.fitHeight,
+                                    alignment: Alignment.center,
+                                  )
+                                : VideoPlayer(videoController!),
                             Center(
                                 child: !isPlaying
                                     ? const Icon(
@@ -81,7 +92,7 @@ class VideoPreviewState extends State<VideoPreview> {
                                         Icons.pause,
                                         color: Colors.white.withOpacity(0.5),
                                         size: 60,
-                                      ))
+                                      )),
                           ],
                         ),
                       )),
@@ -121,5 +132,13 @@ class VideoPreviewState extends State<VideoPreview> {
         videoController = vController;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    if (videoController != null) {
+      videoController!.dispose();
+    }
+    super.dispose();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 import 'package:report_child/controllers/config_manager.dart';
@@ -8,6 +9,7 @@ import 'package:report_child/models/account_model.dart';
 import 'package:report_child/pages/account_page.dart';
 import 'package:report_child/pages/my_videos_page.dart';
 import 'package:report_child/pages/sign_in_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../pages/home_page.dart';
 import '../styles/text_styles.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,7 +18,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 final GlobalKey<ScaffoldState> navBarControllerKey = GlobalKey<ScaffoldState>();
 
 class BottomNavController extends StatefulWidget {
-  BottomNavController({Key? key, this.title}) : super(key: key);
+  const BottomNavController({Key? key, this.title}) : super(key: key);
 
   final String? title;
   @override
@@ -120,15 +122,61 @@ class _BottomNavControllerState extends State<BottomNavController> {
       var localizationDelegate = LocalizedApp.of(context).delegate;
       await configManager
           .getConfig(localizationDelegate.currentLocale.languageCode);
-
+      /*  if (configManager.demoMode) {
+        Provider.of<CaseModel>(context, listen: false).position = Position(
+            latitude: -12.07615,
+            longitude: -12.07615,
+            timestamp: DateTime.now(),
+            accuracy: 0.0,
+            altitude: 0.0,
+            heading: 0.0,
+            speed: 0.0,
+            speedAccuracy: 0.0);
+      } */
       if (configManager.beta) {
         if (await configManager.canShowNotification()) {
+          // ignore: avoid_single_cascade_in_expression_statements
           AwesomeDialog(
             context: context,
             dialogType: DialogType.INFO,
             animType: AnimType.BOTTOMSLIDE,
-            title: translate('Notification'),
-            desc: configManager.betaMessage,
+            dismissOnTouchOutside: false,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    translate('Notification'),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Linkify(
+                        text: configManager.betaMessage,
+                        textAlign: TextAlign.center,
+                        onOpen: (link) async {
+                          if (await canLaunch(link.url)) {
+                            await launch(link.url);
+                          } else {
+                            throw 'Could not launch $link';
+                          }
+                        },
+                        options: const LinkifyOptions(
+                          humanize: false,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             btnOkOnPress: () {},
           )..show();
         }

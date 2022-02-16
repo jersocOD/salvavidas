@@ -27,7 +27,7 @@ class Authentication {
     if (user != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => BottomNavController(),
+          builder: (context) => const BottomNavController(),
         ),
       );
     }
@@ -109,6 +109,11 @@ class Authentication {
 
     // Once signed in, return the UserCredential
     return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  }
+
+  static Future<UserCredential> signInAnonymously() async {
+    final _auth = FirebaseAuth.instance;
+    return _auth.signInAnonymously();
   }
 
   static Future<void> signOut({required BuildContext context}) async {

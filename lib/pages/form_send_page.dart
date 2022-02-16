@@ -265,7 +265,7 @@ class _ObservacionDropDownState extends State<_ObservacionDropDown> {
     obs.getMapIntl();
     Widget trailing = Platform.isIOS
         ? Padding(
-            padding: const EdgeInsets.only(right: 20.0),
+            padding: const EdgeInsets.only(right: 0.0),
             child: Text(
               obs.observacionesIntl[selectedIndex],
               style: const TextStyle(color: Colors.black),
@@ -315,7 +315,7 @@ class _ObservacionDropDownState extends State<_ObservacionDropDown> {
                               Theme.of(context).brightness == Brightness.light
                                   ? Colors.black
                                   : Colors.white70,
-                          size: 30),
+                          size: 20),
                     ],
                   )
                 : trailing,

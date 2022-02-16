@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:report_child/controllers/config_manager.dart';
 
 class RecordButton extends StatefulWidget {
   final Function startRecording;
   final Function stopRecording;
+  final Function record;
 
   const RecordButton(
-      {Key? key, required this.startRecording, required this.stopRecording})
+      {Key? key,
+      required this.startRecording,
+      required this.stopRecording,
+      required this.record})
       : super(key: key);
   @override
   _RecordButtonState createState() => _RecordButtonState();
@@ -16,14 +21,16 @@ class _RecordButtonState extends State<RecordButton> {
   bool isPressing = false;
 
   void changeState() {
-    if (!isRecording) {
+/*     if (!isRecording) {
       widget.startRecording();
     } else {
       widget.stopRecording();
-    }
-    setState(() {
+    } */
+
+    widget.record();
+/*     setState(() {
       isRecording = !isRecording;
-    });
+    }); */
   }
 
   @override

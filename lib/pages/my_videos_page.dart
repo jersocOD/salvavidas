@@ -80,7 +80,7 @@ class _MyVideosPageState extends State<MyVideosPage> {
 
   Widget _childCaseCard(QueryDocumentSnapshot<ChildCase> childCase) {
     String locationRef = childCase.data().referencia;
-
+    debugPrint(childCase.data().videoUrl);
     if (childCase.data().placemark != "") {
       var placemark = jsonDecode(childCase.data().placemark);
       locationRef = placemark["locality"];

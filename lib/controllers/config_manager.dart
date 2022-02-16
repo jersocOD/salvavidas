@@ -10,6 +10,7 @@ class ConfigManager {
   bool beta = true;
   bool mailAlwaysInSpanish = true;
   String betaMessage = "";
+  bool demoMode = false;
   Future<void> getConfig(String lang) async {
     var response = await http
         .get(Uri.parse("https://salvavidas.mundoultra.com/config.json"));

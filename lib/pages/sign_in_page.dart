@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:report_child/controllers/authentication.dart';
+import 'package:report_child/widgets/anonymous_sign_in_button.dart';
 import 'package:report_child/widgets/facebook_sign_in_button.dart';
 import 'package:report_child/widgets/logo_title.dart';
 import 'package:report_child/widgets/sign_in_button.dart';
@@ -28,12 +31,13 @@ class _SignInScreenState extends State<SignInScreen> {
             children: [
               Row(),
               Expanded(
-                child: Column(
+                  child: /* Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [LogoTitle()],
-                ),
-              ),
+                  children: [ */
+                      LogoTitle() /* ],
+                ), */
+                  ),
               FutureBuilder(
                 future: Authentication.initializeFirebase(context: context),
                 builder: (context, snapshot) {
@@ -41,7 +45,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     return const Text('Error initializing Firebase');
                   } else if (snapshot.connectionState == ConnectionState.done) {
                     return Column(
-                      children: [GoogleSignInButton(), FacebookSignInButton()],
+                      children: Platform.isAndroid
+                          ? [GoogleSignInButton(), FacebookSignInButton()]
+                          : [ContinueSignInButton()],
                     );
                   }
                   return const CircularProgressIndicator(

@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:convert';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:http/http.dart' as http;
@@ -7,10 +9,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:report_child/classes/child_case.dart';
 import 'package:report_child/controllers/geolocator.dart';
+import 'package:report_child/controllers/observaciones_types.dart';
 import 'package:report_child/models/account_model.dart';
 import 'package:report_child/models/case_model.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
-
 import 'config_manager.dart';
 
 class CaseUploader {
@@ -35,7 +36,7 @@ class CaseUploader {
 
     // Call the user's CollectionReference to add a new user
     var response = await videos.add(ChildCase(
-      userEmail: account.user!.email!,
+      userEmail: await _getEmail(account),
       coordinatesLongitude: cs.position!.longitude,
       coordinatesLatitude: cs.position!.latitude,
       videoUrl: "",
@@ -68,29 +69,33 @@ class CaseUploader {
         context);
   }
 
+  static Future<String> _getEmail(AccountModel account) async {
+    if (configManager.demoMode) return "unicef@mundoultra.com";
+    if (Platform.isAndroid) return account.user!.email!;
+    var deviceInfo = DeviceInfoPlugin();
+
+    var iosDeviceInfo = await deviceInfo.iosInfo;
+    String? id = iosDeviceInfo.identifierForVendor;
+    if (id == null) return account.user!.uid;
+    return account.user!.uid + "|" + id;
+  }
+
   static Future<void> sendMail(
       List<String> attachments, CaseModel cs, BuildContext context) async {
-/*     List<Map<String, String>> addresses = [
-      /*  {"name": "Jer1", "email": "jeremyultra@gmail.com"}, */
-    ];
-    List<Map<String, String>> CCaddresses = [
-      /*    {"name": "Jer2", "email": "socratesj.osorio@gmail.com"}, */
-    ];
-    List<Map<String, String>> CCOaddresses = [
-      {"name": "Jer3", "email": "socratesj.osorio@gmail.com"},
-    ];
-    /*    List<String> attachments = [
-     "jeremy.estrella10@gmail.com",
-    ]; */ */
     var list = await _getEmailsList();
+    Observaciones obs = Observaciones();
+    obs.getMapIntl();
+
+    String obsLocalized = obs
+        .observacionesIntl[Observaciones.observaciones.indexOf(cs.observacion)];
     var response = await http.post(
         Uri.parse("https://salvavidas.mundoultra.com/send_mail.php"),
         body: {
-          "secretKey": "MAMAMELODY2021",
+          "secretKey": "15012022",
           "subject": (configManager.mailAlwaysInSpanish)
               ? "Reporte de Niño ${cs.observacion}"
-              : translate("Mail.Subject", args: {"type": cs.observacion}),
-          "messageHtml": await messageFromCS(cs, context),
+              : translate("Mail.Subject", args: {"type": obsLocalized}),
+          "messageHtml": await messageFromCS(cs, context, obsLocalized),
           if (list["PRIMARY"].isNotEmpty)
             "addresses": jsonEncode(list["PRIMARY"]),
           if (list["CC"].isNotEmpty) "CCaddresses": jsonEncode(list["CC"]),
@@ -120,7 +125,7 @@ class CaseUploader {
     var response = await http.post(
         Uri.parse("https://salvavidas.mundoultra.com/uploader.php"),
         body: {
-          "secretKey": "MAMAMELODY2021",
+          "secretKey": "15012022",
           "videoBytes": videoBase64,
           "thumbnailBytes": thumbnailBase64,
           "id": id,
@@ -136,7 +141,7 @@ class CaseUploader {
     if (account.user == null) return [];
 
     return await videos
-        .where('userEmail', isEqualTo: account.user!.email)
+        .where('userEmail', isEqualTo: (await _getEmail(account)))
         .get()
         .then((snapshot) => snapshot.docs);
   }
@@ -158,8 +163,9 @@ class CaseUploader {
   }
 
   static Future<String> messageFromCS(
-      CaseModel cs, BuildContext context) async {
+      CaseModel cs, BuildContext context, String observacionLocalized) async {
     var localizationDelegate = LocalizedApp.of(context).delegate;
+
     String lang = configManager.mailAlwaysInSpanish
         ? "es"
         : localizationDelegate.currentLocale.languageCode;
@@ -167,7 +173,7 @@ class CaseUploader {
         "https://salvavidas.mundoultra.com/mail-templates/$lang.html"));
     String mailData = utf8.decode(response.bodyBytes);
 
-    mailData = mailData.replaceAll("{observacion}", cs.observacion);
+    mailData = mailData.replaceAll("{observacion}", observacionLocalized);
     mailData = mailData.replaceAll("{referencia}", cs.referencia);
     mailData = mailData.replaceAll("{comentarios}", cs.comentarios);
     mailData =

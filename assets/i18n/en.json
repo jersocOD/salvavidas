@@ -19,7 +19,8 @@
   },
   "SignInPage": {
     "SignInWithGoogle": "Sign in with Google",
-    "SignInWithFacebook": "Sign in with Facebook"
+    "SignInWithFacebook": "Sign in with Facebook" ,
+    "Continue": "Continuar"
   },
   "MyVideosPage": {
     "Loading": {
@@ -33,8 +34,10 @@
   },
   "AccountPage": {
     "Hello": "Hello {name}!",
-    "SignOutPrompt": "You are now signed in using your Google account. To sign out of your account click the \"Sign Out\" button below.",
-    "SignOut": "Logout"
+    "SignOutPrompt": "You are now signed in. To sign out of your account click the \"Sign Out\" button below.",
+    "SignOut": "Logout",
+    "ContactSupport":"Contact Support",
+    "PrivacyPolicy":"Privacy Policy"
   },
   "FormPage": {
     "ReferencePlaceholder": "Street, Urbanization, District, Nearby place.",
@@ -53,7 +56,7 @@
     "Reference": "Reference",
     "Comments": "Comments",
     "Types": {
-      "OrphanedByCovid": "Orphaned by Covid",
+      "OrphanedByCovid": "Covid Orphan",
       "Abandoned": "Abandoned/Homeless",
       "Lost": "Lost",
       "Endangered/Vulnerable": "Endangered/Vulnerable",

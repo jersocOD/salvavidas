@@ -32,10 +32,10 @@ cd $project_dir
 flutter clean
 
 
-# echo "********Deploying for IOS********"
-# flutter build ios --release --obfuscate --split-debug-info="$project_dir/outputs/ios/$version"
-#  open "$project_dir/ios/Runner.xcworkspace"
-# osascript -e 'display notification "'$name' ready to be archived." with title "iOS Build Succeeded"'
+echo "********Deploying for IOS********"
+flutter build ipa --release --obfuscate --split-debug-info="$project_dir/outputs/ios/$version"
+ open "$project_dir/build/ios/archive/Runner.xcarchive"
+osascript -e 'display notification "'$name' ready to be archived." with title "iOS Build Succeeded"'
 
 
 

@@ -28,6 +28,14 @@
 				<string>fb282449297136190</string>
 			</array>
 		</dict>
+		<dict>
+		<key>CFBundleTypeRole</key>
+		<string>Editor</string>
+		<key>CFBundleURLSchemes</key>
+		<array>
+			<string>com.googleusercontent.apps.975831608713-qo8ek54grgalvdutp6jcborb2jgtmv9q</string>
+		</array>
+	</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
@@ -54,19 +62,22 @@
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
+		<string>https</string>
+  		<string>http</string>
+  		<string>mailto</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Para grabar el video del niño</string>
+	<string>Salvavidas needs access to the camera, so you can record a video of the child.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Para guardar la localización del niño</string>
+	<string>Salvavidas needs access to the location in order to retrieve the location of the child.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Para guardar la localización del niño</string>
+	<string>Salvavidas needs access to the location in order to retrieve the location of the child.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Para grabar el audio del video del niño</string>
+	<string>Salvavidas needs access to the microphon, so the video recording works properly.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Para grabar un video del niño</string>
+	<string>Salvavidas needs access to the photo library, so you can choose a video instead of recording.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

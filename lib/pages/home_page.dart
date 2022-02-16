@@ -9,7 +9,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:report_child/controllers/config_manager.dart';
 import 'package:report_child/controllers/geolocator.dart';
 import 'package:report_child/models/case_model.dart';
 import 'package:report_child/pages/form_send_page.dart';
@@ -20,9 +22,6 @@ import 'package:report_child/widgets/timer.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as VidThumb;
 
-Function? disposeCamera;
-Function? reinitCamera;
-CameraDescription? currentCamera;
 bool cameraIsDisposed = false;
 typedef positionStreamListener = void Function(Position? position);
 positionStreamListener? onPositionChanged;
@@ -135,9 +134,6 @@ class _HomePageState extends State<HomePage>
       if (camera != null) {
         onNewCameraSelected(camera);
       }
-      disposeCamera = controller!.dispose;
-      reinitCamera = onNewCameraSelected;
-      currentCamera = camera;
     }
   }
 
@@ -176,7 +172,14 @@ class _HomePageState extends State<HomePage>
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          _cameraPreviewWidget(),
+          configManager.demoMode
+              ? Image.network(
+                  "https://salvavidas.mundoultra.com/cdn/image1-cropped.jpg",
+                  fit: BoxFit.fitHeight,
+                  alignment: Alignment.center,
+                  /*   centerSlice: const Rect.fromLTRB(50, 0, 0, 80), */
+                )
+              : _cameraPreviewWidget(),
           Align(
             alignment: Alignment.topCenter,
             child: Container(
@@ -190,7 +193,9 @@ class _HomePageState extends State<HomePage>
                     bottom: 0,
                     child: Center(
                       child: Text(
-                        "Lat: ${pos!.latitude}, Long: ${pos.longitude}",
+                        configManager.demoMode
+                            ? "Lat: -12.07615, Long: -12.07615"
+                            : "Lat: ${pos!.latitude.toStringAsFixed(5)}, Long: ${pos.longitude.toStringAsFixed(5)}",
                         style: const TextStyle(
                             color: Colors.white60, fontSize: 12),
                         textAlign: TextAlign.left,
@@ -241,6 +246,30 @@ class _HomePageState extends State<HomePage>
           Align(
             alignment: Alignment.bottomCenter,
             child: RecordButton(
+              record: () async {
+                if (configManager.demoMode) {
+                  goToForm();
+                  return;
+                }
+                final ImagePicker _picker = ImagePicker();
+                final XFile? image = await _picker.pickVideo(
+                    source: ImageSource.camera,
+                    maxDuration: const Duration(seconds: 25));
+                if (image == null) return;
+                Provider.of<CaseModel>(context, listen: false).videoBytes =
+                    await image.readAsBytes();
+                Provider.of<CaseModel>(context, listen: false).videoPath =
+                    image.path;
+                Provider.of<CaseModel>(context, listen: false)
+                        .videoThumbnailBytes =
+                    await VidThumb.VideoThumbnail.thumbnailData(
+                  video: image.path,
+                  imageFormat: VidThumb.ImageFormat.JPEG,
+                  maxWidth: MediaQuery.of(context).size.width.truncate(),
+                  quality: 100,
+                );
+                goToForm();
+              },
               startRecording: cameraController != null &&
                       cameraController.value.isInitialized &&
                       !cameraController.value.isRecordingVideo
@@ -293,21 +322,17 @@ class _HomePageState extends State<HomePage>
         !cameraController.value.isInitialized) {
       return Container();
     } else {
-      return Listener(
-        onPointerDown: (_) => _pointers++,
-        onPointerUp: (_) => _pointers--,
-        child: CameraPreview(
-          controller!,
+      return CameraPreview(
+        controller!,
 /*           child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-            return GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onScaleStart: _handleScaleStart,
-              onScaleUpdate: _handleScaleUpdate,
-              onTapDown: (details) => onViewFinderTap(details, constraints),
-            );
-          }), */
-        ),
+            builder: (BuildContext context, BoxConstraints constraints) {
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onScaleStart: _handleScaleStart,
+            onScaleUpdate: _handleScaleUpdate,
+            onTapDown: (details) => onViewFinderTap(details, constraints),
+          );
+        }), */
       );
     }
   }
@@ -443,6 +468,11 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> goToForm() async {
+    if (configManager.demoMode) {
+      await Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => FormSendPage()));
+      return;
+    }
     timerController.pause();
     await geolocalizationManager.getCurrentLocation(context);
 
@@ -480,12 +510,12 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  void onResumeButtonPressed() {
+  /*  void onResumeButtonPressed() {
     resumeVideoRecording().then((_) {
       if (mounted) setState(() {});
       // showInSnackBar('Video recording resumed');
     });
-  }
+  } */
 
   Future<void> startVideoRecording() async {
     final CameraController? cameraController = controller;
@@ -537,7 +567,7 @@ class _HomePageState extends State<HomePage>
       rethrow;
     }
   }
-
+/* 
   Future<void> resumeVideoRecording() async {
     final CameraController? cameraController = controller;
 
@@ -551,7 +581,7 @@ class _HomePageState extends State<HomePage>
       _showCameraException(e);
       rethrow;
     }
-  }
+  } */
 
   Future<void> setFlashMode(FlashMode mode) async {
     if (controller == null) {
