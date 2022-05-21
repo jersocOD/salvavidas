@@ -46,7 +46,11 @@ class _SignInScreenState extends State<SignInScreen> {
                   } else if (snapshot.connectionState == ConnectionState.done) {
                     return Column(
                       children: Platform.isAndroid
-                          ? [GoogleSignInButton(), FacebookSignInButton()]
+                          ? [
+                              GoogleSignInButton(),
+                              FacebookSignInButton(),
+                              ContinueSignInButton()
+                            ]
                           : [ContinueSignInButton()],
                     );
                   }

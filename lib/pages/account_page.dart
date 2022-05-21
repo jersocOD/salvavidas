@@ -50,13 +50,14 @@ class _AccountPageState extends State<AccountPage> {
                       )
                     : ClipOval(
                         child: Material(
-                          color: CustomColors.firebaseGrey.withOpacity(0.3),
+                          color:
+                              Color.fromARGB(255, 0, 153, 255).withOpacity(0.3),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Icon(
                               Icons.person,
-                              size: 60,
-                              color: CustomColors.firebaseGrey,
+                              size: 100,
+                              color: Color.fromARGB(255, 255, 255, 255),
                             ),
                           ),
                         ),
@@ -66,7 +67,7 @@ class _AccountPageState extends State<AccountPage> {
                 children: [ */
               Text(
                 translate('AccountPage.Hello', args: {
-                  "name": Platform.isAndroid ? _user.displayName! : ""
+                  "name": _user.displayName != null ? _user.displayName! : ""
                 }),
                 style: TextStyle(
                   color: Color(0xFF23049D),

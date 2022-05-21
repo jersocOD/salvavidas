@@ -37,6 +37,8 @@ class CaseUploader {
     // Call the user's CollectionReference to add a new user
     var response = await videos.add(ChildCase(
       userEmail: await _getEmail(account),
+      userID: await _getUserID(account),
+      authID: account.user!.uid,
       coordinatesLongitude: cs.position!.longitude,
       coordinatesLatitude: cs.position!.latitude,
       videoUrl: "",
@@ -71,13 +73,33 @@ class CaseUploader {
 
   static Future<String> _getEmail(AccountModel account) async {
     if (configManager.demoMode) return "unicef@mundoultra.com";
-    if (Platform.isAndroid) return account.user!.email!;
-    var deviceInfo = DeviceInfoPlugin();
+
+    if (account.user!.email == null) return "";
+
+    return account.user!.email!;
+    /* var deviceInfo = DeviceInfoPlugin();
 
     var iosDeviceInfo = await deviceInfo.iosInfo;
     String? id = iosDeviceInfo.identifierForVendor;
     if (id == null) return account.user!.uid;
-    return account.user!.uid + "|" + id;
+    return account.user!.uid + "|" + id; */
+  }
+
+  static Future<String> _getUserID(AccountModel account) async {
+    var deviceInfo = DeviceInfoPlugin();
+    String? id;
+    if (Platform.isIOS) {
+      // import 'dart:io'
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      id = iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else if (Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      id = androidDeviceInfo.androidId; // unique ID on Android
+    }
+
+    if (id == null)
+      return account.user!.uid; // Only if not found, it will use the auth id
+    return id;
   }
 
   static Future<void> sendMail(
@@ -139,9 +161,23 @@ class CaseUploader {
       BuildContext context) async {
     var account = Provider.of<AccountModel>(context, listen: false);
     if (account.user == null) return [];
+    /*  updateAllDocuments(account); */
+    var queryField = "userEmail";
+    var queryValue = await _getEmail(account);
 
+    if (queryValue == "") {
+      queryField = "userID";
+      queryValue = await _getUserID(account);
+      debugPrint("No user email, using userID instead: $queryValue");
+      if (queryValue == account.user!.uid) {
+        queryField = "authID";
+        debugPrint("No user email or userID, using authID instead");
+      }
+    } else {
+      debugPrint("Using user email: $queryValue");
+    }
     return await videos
-        .where('userEmail', isEqualTo: (await _getEmail(account)))
+        .where(queryField, isEqualTo: queryValue)
         .get()
         .then((snapshot) => snapshot.docs);
   }
@@ -161,6 +197,29 @@ class CaseUploader {
       },
     ]; */
   }
+
+  //Add a new field "userID" to all Firestore documents
+/*   static Future<void> updateAllDocuments(AccountModel account) async {
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    var querySnapshot =
+        await FirebaseFirestore.instance.collection('videos').get();
+
+    for (var doc in querySnapshot.docs) {
+/*       batch.update(doc.reference,
+          {'userID': await _getUserID(account), 'authID': account.user!.uid}); */
+      String actualEmail = doc.get("userEmail");
+      print(actualEmail);
+      if (actualEmail.contains("|")) {
+        List<String> split = actualEmail.split("|");
+        batch.update(doc.reference,
+            {'authID': split[0], 'userID': split[1], 'userEmail': ""});
+        //"authID|userID"
+
+      }
+    }
+    return batch.commit();
+  } */
 
   static Future<String> messageFromCS(
       CaseModel cs, BuildContext context, String observacionLocalized) async {
